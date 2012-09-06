@@ -94,7 +94,7 @@ Valid `data_dict` stuff:
 
 ## LICENSE
 
-All source code here is available under the [MPL 2.0][] license, unless
+All source code here is available under the [LGPL Version 3][] license, unless
 otherwise indicated.
 
-  [MPL 2.0]: https://mozilla.org/MPL/2.0/
+  [LGPL Version 3]: http://www.gnu.org/licenses/lgpl.txt 

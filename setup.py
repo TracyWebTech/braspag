@@ -10,7 +10,6 @@ setup(
     packages=['braspag'],
     package_data = {
         'braspag': ['templates/*.xml'],
-#        'braspag/templates/authorize.xml'
     },
     install_requires=['Jinja2']
 )
