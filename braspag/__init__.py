@@ -179,6 +179,9 @@ class BraspagResponse(object):
 def webservice_request(xml):
     WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
 
+    if isinstance(xml, unicode):
+        xml = xml.encode('utf-8')
+
     http = httplib.HTTPSConnection('homologacao.pagador.com.br')
     http.request("POST", WSDL, body=xml, headers = {
         "Host": "localhost",
@@ -211,6 +214,6 @@ def authorize_transaction(data_dict):
         data_dict['transaction_type'] = 2
 
     template = JINJA_ENV.get_template('authorize.xml')
-    xml_request = template.render(data_dict).decode('utf-8')
+    xml_request = template.render(data_dict)
     logging.debug(xml_request)
     return webservice_request(xml_request)
