@@ -95,11 +95,12 @@ class BraspagHttpResponseException(BraspagException):
     """
     Status code Exception
     """
-    def __init__(self,msg):
+    def __init__(self,code,msg):
+        self.code = code
         self.msg = msg
 
     def __str__(self):
-        return repr(self.msg)
+        return "[{}] {}".format(self.code,self.msg)
 
 
 class BraspagResponse(object):
@@ -116,8 +117,7 @@ class BraspagResponse(object):
 
     def __init__(self, http_reponse):
         if http_reponse.status != 200:
-            # TODO: raise custom exception
-            raise Exception(http_reponse.status, http_reponse.reason)
+            raise BraspagHttpResponseException(http_reponse.status, http_reponse.reason)
 
         xml_response = http_reponse.read()
         self.root = ElementTree.fromstring(xml_response)
@@ -211,6 +211,6 @@ def authorize_transaction(data_dict):
         data_dict['transaction_type'] = 2
 
     template = JINJA_ENV.get_template('authorize.xml')
-    xml_request = template.render(data_dict)
+    xml_request = template.render(data_dict).decode('utf-8')
     logging.debug(xml_request)
     return webservice_request(xml_request)
