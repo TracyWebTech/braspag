@@ -83,6 +83,25 @@ JINJA_ENV = jinja2.Environment(
 )
 
 
+
+#Exceptions
+class BraspagException(Exception):
+    """
+    Custom exception base
+    """
+    pass
+
+class BraspagHttpResponseException(BraspagException):
+    """
+    Status code Exception
+    """
+    def __init__(self,msg):
+        self.msg = msg
+
+    def __str__(self):
+        return repr(self.msg)
+
+
 class BraspagResponse(object):
 
     STATUS = [
