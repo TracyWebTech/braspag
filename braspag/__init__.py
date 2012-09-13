@@ -183,7 +183,6 @@ def webservice_request(xml):
     http.request("POST", WSDL, body=xml, headers = {
         "Host": "localhost",
         "Content-Type": "text/xml; charset=UTF-8",
-        "Content-Length": len(xml)
     })
     return BraspagResponse(http.getresponse())
 
