@@ -83,6 +83,26 @@ JINJA_ENV = jinja2.Environment(
 )
 
 
+
+#Exceptions
+class BraspagException(Exception):
+    """
+    Custom exception base
+    """
+    pass
+
+class BraspagHttpResponseException(BraspagException):
+    """
+    Status code Exception
+    """
+    def __init__(self,code,msg):
+        self.code = code
+        self.msg = msg
+
+    def __str__(self):
+        return "[{}] {}".format(self.code,self.msg)
+
+
 class BraspagResponse(object):
 
     STATUS = [
@@ -97,8 +117,7 @@ class BraspagResponse(object):
 
     def __init__(self, http_reponse):
         if http_reponse.status != 200:
-            # TODO: raise custom exception
-            raise Exception(http_reponse.status, http_reponse.reason)
+            raise BraspagHttpResponseException(http_reponse.status, http_reponse.reason)
 
         xml_response = http_reponse.read()
         self.root = ElementTree.fromstring(xml_response)
@@ -160,11 +179,13 @@ class BraspagResponse(object):
 def webservice_request(xml):
     WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
 
+    if isinstance(xml, unicode):
+        xml = xml.encode('utf-8')
+
     http = httplib.HTTPSConnection('homologacao.pagador.com.br')
     http.request("POST", WSDL, body=xml, headers = {
         "Host": "localhost",
         "Content-Type": "text/xml; charset=UTF-8",
-        "Content-Length": len(xml)
     })
     return BraspagResponse(http.getresponse())
 
