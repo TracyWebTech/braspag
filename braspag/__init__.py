@@ -119,12 +119,14 @@ class BraspagResponse(object):
 
     def __init__(self, http_reponse):
         if http_reponse.status != 200:
-            raise BraspagHttpResponseException(http_reponse.status, http_reponse.reason)
+            raise BraspagHttpResponseException(http_reponse.status,
+                                               http_reponse.reason)
 
         xml_response = http_reponse.read()
         self.root = ElementTree.fromstring(xml_response)
 
-        logging.debug(minidom.parseString(xml_response).toprettyxml(indent='  '))
+        logging.debug(minidom.parseString(xml_response).\
+                                                    toprettyxml(indent='  '))
 
         if self._get_text('Success') == 'true':
             self.success = True
