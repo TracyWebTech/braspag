@@ -57,6 +57,8 @@ Valid `data_dict` stuff:
  * card\_number:
  * card\_security_code:
  * card\_exp_date:
+ * card\_token:
+ * save\_card:
  * number\_of\_payments:
  * payment\_plan:
  * currency:

@@ -10,6 +10,7 @@ from xml.dom import minidom
 from xml.etree import ElementTree
 from decimal import Decimal, InvalidOperation
 
+
 __version__ = '0.1'
 
 
@@ -77,11 +78,11 @@ PAYMENT_METHODS = {
     }
 }
 
+
 JINJA_ENV = jinja2.Environment(
     autoescape=True,
     loader=jinja2.PackageLoader('braspag'),
 )
-
 
 
 #Exceptions
@@ -90,6 +91,7 @@ class BraspagException(Exception):
     Custom exception base
     """
     pass
+
 
 class BraspagHttpResponseException(BraspagException):
     """
@@ -138,6 +140,7 @@ class BraspagResponse(object):
         self.authorization_code = self._get_text('AuthorizationCode')
         self.return_code = self._get_int('ReturnCode')
         self.return_message = self._get_text('ReturnMessage')
+        self.card_token = self._get_text('CreditCardToken')
         self.status = BraspagResponse.STATUS[self._get_int('Status')]
         self.errors = self._get_errors()
 
@@ -191,6 +194,13 @@ def webservice_request(xml):
 
 
 def authorize_transaction(data_dict):
+
+    if data_dict.get('card_number'):
+        assert all(
+            data_dict.has_key('CardSecurityCode'),
+            data_dict.has_key('CardExpirationDate'),
+        ), ("Transações com Cartão de Crédito exigem os parametros: "
+            "card_number, card_security_code e card_exp_date.")
 
     if not data_dict.get('number_of_payments'):
         data_dict['number_of_payments'] = 1

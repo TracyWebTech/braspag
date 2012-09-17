@@ -3,7 +3,7 @@
   <soap:Body>
     <AuthorizeTransaction xmlns="https://www.pagador.com.br/webservice/pagador">
       <request>
-        
+
         <RequestId>{{ request_id }}</RequestId>
         <Version>1.0</Version>
 
@@ -16,7 +16,7 @@
             <BraspagOrderId xsi:nil="true" />
           {% endif %}
         </OrderData>
-  
+
         <CustomerData>
           <CustomerIdentity>{{ customer_id }}</CustomerIdentity>
           <CustomerName>{{ customer_name }}</CustomerName>
@@ -31,10 +31,10 @@
                   <Complement xsi:nil="true"/>
                 {% endif %}
                 <District>{{ customer_address.district }}</District>
-                <ZipCode>{{ customer_address.zipcode }}</ZipCode> 
+                <ZipCode>{{ customer_address.zipcode }}</ZipCode>
             </CustomerAddressData>
           {% else %}
-            <CustomerAddressData xsi:nil="true" />  
+            <CustomerAddressData xsi:nil="true" />
           {% endif %}
           {% if delivery_address %}
             <DeliveryAddressData>
@@ -46,13 +46,13 @@
                   <Complement xsi:nil="true"/>
                 {% endif %}
                 <District>{{ delivery_address.district }}</District>
-                <ZipCode>{{ delivery_address.zipcode }}</ZipCode> 
+                <ZipCode>{{ delivery_address.zipcode }}</ZipCode>
             </DeliveryAddressData>
           {% else %}
-            <DeliveryAddressData xsi:nil="true" />  
+            <DeliveryAddressData xsi:nil="true" />
           {% endif %}
         </CustomerData>
-  
+
         <PaymentDataCollection>
           <PaymentDataRequest xsi:type="CreditCardDataRequest">
             <PaymentMethod>{{ payment_method }}</PaymentMethod>
@@ -63,13 +63,24 @@
             <PaymentPlan>{{ payment_plan }}</PaymentPlan>
             <TransactionType>{{ transaction_type }}</TransactionType>
             <CardHolder>{{ card_holder }}</CardHolder>
-            <CardNumber>{{ card_number }}</CardNumber>
-            <CardSecurityCode>{{ card_security_code }}</CardSecurityCode>
-            <CardExpirationDate>{{ card_exp_date }}</CardExpirationDate>
+
+            {% if card_number %}
+              <CardNumber>{{ card_number }}</CardNumber>
+              <CardSecurityCode>{{ card_security_code }}</CardSecurityCode>
+              <CardExpirationDate>{{ card_exp_date }}</CardExpirationDate>
+              {% if save_card %}
+                 <SaveCreditCard>{{ save_card }}</SaveCreditCard>
+              {% endif %}
+            {% endif %}
+
+            {% if card_token %}
+               <CreditCardToken>{{ card_token }}</CreditCardToken>
+            {% endif %}
+
             <AdditionalDataCollection xsi:nil="true" />
           </PaymentDataRequest>
         </PaymentDataCollection>
-  
+
       </request>
     </AuthorizeTransaction>
   </soap:Body>
