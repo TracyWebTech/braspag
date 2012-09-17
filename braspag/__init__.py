@@ -150,7 +150,8 @@ class BraspagResponse(object):
         xml_tag = node.find('.//{{{0}}}{1}'.format(
                                             BraspagResponse.NAMESPACE, field))
         if xml_tag is not None:
-            return xml_tag.text.strip()
+            if xml_tag.text is not None:
+                return xml_tag.text.strip()
         return ''
 
     def _get_int(self, field):
@@ -201,7 +202,7 @@ def authorize_transaction(data_dict):
             'card_exp_date',
             'card_number',
         )
-        assert all(data_dict.has_key(key) for key in card_keys),
+        assert all(data_dict.has_key(key) for key in card_keys), \
             ("Transações com Cartão de Crédito exigem os "
             "parametros: {0}".format(' ,'.join(card_keys)))
 
