@@ -196,11 +196,14 @@ def webservice_request(xml):
 def authorize_transaction(data_dict):
 
     if data_dict.get('card_number'):
-        assert all(
-            data_dict.has_key('CardSecurityCode'),
-            data_dict.has_key('CardExpirationDate'),
-        ), ("Transações com Cartão de Crédito exigem os parametros: "
-            "card_number, card_security_code e card_exp_date.")
+        card_keys = (
+            'card_security_code',
+            'card_exp_date',
+            'card_number',
+        )
+        assert all(data_dict.has_key(key) for key in card_keys),
+            ("Transações com Cartão de Crédito exigem os "
+            "parametros: {0}".format(' ,'.join(card_keys)))
 
     if not data_dict.get('number_of_payments'):
         data_dict['number_of_payments'] = 1
