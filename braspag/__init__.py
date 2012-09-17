@@ -229,6 +229,9 @@ def authorize_transaction(data_dict):
         # 2 = captura automatica
         data_dict['transaction_type'] = 2
 
+    if data_dict.get('save_card', False):
+        data_dict['save_card'] = 'true'
+
     template = JINJA_ENV.get_template('authorize.xml')
     xml_request = template.render(data_dict)
     logging.debug(xml_request)
