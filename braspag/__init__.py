@@ -201,7 +201,7 @@ def webservice_request(xml):
 
 def authorize_transaction(data_dict):
 
-    assert any(data_dict.get('card_number'), data_dict.get('card_token')),\
+    assert any((data_dict.get('card_number'), data_dict.get('card_token'))),\
            'card_number ou card_token devem ser fornecidos'
 
     if data_dict.get('card_number'):
