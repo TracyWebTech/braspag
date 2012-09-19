@@ -200,6 +200,7 @@ def authorize_transaction(data_dict):
 
     if data_dict.get('card_number'):
         card_keys = (
+            'card_holder',
             'card_security_code',
             'card_exp_date',
             'card_number',
