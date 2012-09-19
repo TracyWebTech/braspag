@@ -128,10 +128,14 @@ class BraspagResponse(object):
         logging.debug(minidom.parseString(xml_response).\
                                                     toprettyxml(indent='  '))
 
+        self.correlation_id = self._get_text('CorrelationId')
+        self.errors = self._get_errors()
+
         if self._get_text('Success') == 'true':
             self.success = True
         else:
             self.success = False
+            return
 
         self.order_id = self._get_text('OrderId')
         self.braspag_order_id = self._get_text('BraspagOrderId')
@@ -144,7 +148,6 @@ class BraspagResponse(object):
         self.return_message = self._get_text('ReturnMessage')
         self.card_token = self._get_text('CreditCardToken')
         self.status = BraspagResponse.STATUS[self._get_int('Status')]
-        self.errors = self._get_errors()
 
     def _get_text(self, field, node=None):
         if node is None:
