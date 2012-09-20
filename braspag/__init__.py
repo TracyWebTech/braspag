@@ -23,6 +23,7 @@ __all__ = [
 
 PAYMENT_METHODS = {
     'Cielo': {
+        'Visa Electron': '123',
         'Visa': 500,
         'MasterCard': 501,
         'Amex': 502,
