@@ -245,7 +245,7 @@ def authorize_transaction(data_dict,production=True):
     logging.debug(xml_request)
 
     if production:
-        url = ''
+        url = 'www.pagador.com.br'
     else:
         url = 'homologacao.pagador.com.br'
 
