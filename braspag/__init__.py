@@ -219,8 +219,14 @@ def authorize_transaction(data_dict):
     if not data_dict.get('number_of_payments'):
         data_dict['number_of_payments'] = 1
 
+    try:
+        number_of_payments = int(data_dict.get('number_of_payments'))
+    except ValueError:
+        raise BraspagException('Number of payments must be int.')
+
     if not data_dict.get('payment_plan'):
-        if data_dict.get('number_of_payments') > 1:
+
+        if number_of_payments > 1:
             # 2 = parcelado pelo emissor do cartão
             data_dict['payment_plan'] = 2
         else:
