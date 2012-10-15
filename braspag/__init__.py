@@ -186,13 +186,13 @@ class BraspagResponse(object):
         return errors
 
 
-def webservice_request(xml):
+def webservice_request(xml,url):
     WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
-
+    
     if isinstance(xml, unicode):
         xml = xml.encode('utf-8')
 
-    http = httplib.HTTPSConnection('homologacao.pagador.com.br')
+    http = httplib.HTTPSConnection(url)
     http.request("POST", WSDL, body=xml, headers = {
         "Host": "localhost",
         "Content-Type": "text/xml; charset=UTF-8",
@@ -200,7 +200,7 @@ def webservice_request(xml):
     return BraspagResponse(http.getresponse())
 
 
-def authorize_transaction(data_dict):
+def authorize_transaction(data_dict,production=True):
 
     assert any((data_dict.get('card_number'), data_dict.get('card_token'))),\
            'card_number ou card_token devem ser fornecidos'
@@ -243,4 +243,10 @@ def authorize_transaction(data_dict):
     template = JINJA_ENV.get_template('authorize.xml')
     xml_request = template.render(data_dict)
     logging.debug(xml_request)
-    return webservice_request(xml_request)
+
+    if production:
+        url = ''
+    else:
+        url = 'homologacao.pagador.com.br'
+
+    return webservice_request(xml_request,url)
