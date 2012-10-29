@@ -259,11 +259,6 @@ def authorize_transaction(data_dict,production=True):
 
 
 def void_transaction(data_dict, production=True):
-    assert all(data_dict.get(key) for key in ['request_id',
-                                               'merchant_id',
-                                               'braspag_transaction_id',
-                                               'amount']),
-                                               u'Void Request inválido.'
 
     template = JINJA_ENV.get_template('void.xml')
     xml_request = template.render(data_dict)
