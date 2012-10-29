@@ -1,9 +1,16 @@
-{% extends 'authorize.xml' %}
-
-{% block request %}
-<MerchantId>{{ merchant_id }}</MerchantId>
-<TransactionDataCollection>
-    <BraspagTransactionId>{{ braspag_transaction_id }}</BraspagTransactionId>
-    <Amount>{{ amount }}</Amount>
-</TransactionDataCollection>
-{% endblock %}
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <VoidCreditCardTransaction xmlns="https://www.pagador.com.br/webservice/pagador">
+      <request>
+        <RequestId>{{ request_id }}</RequestId>
+        <Version>1.0</Version>
+        <MerchantId>{{ merchant_id }}</MerchantId>
+        <TransactionDataCollection>
+            <BraspagTransactionId>{{ braspag_transaction_id }}</BraspagTransactionId>
+            <Amount>{{ amount }}</Amount>
+        </TransactionDataCollection>
+      </request>
+    </VoidCreditCardTransaction>
+  </soap:Body>
+</soap:Envelope>
