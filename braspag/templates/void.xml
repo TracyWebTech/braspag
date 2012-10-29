@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <VoidCreditCardTransaction xmlns="https://www.pagador.com.br/webservice/pagador">
-      <request>
-        <RequestId>{{ request_id }}</RequestId>
-        <Version>1.0</Version>
-        <MerchantId>{{ merchant_id }}</MerchantId>
-        <TransactionDataCollection>
-            <BraspagTransactionId>{{ braspag_transaction_id }}</BraspagTransactionId>
-            <Amount>{{ amount }}</Amount>
-        </TransactionDataCollection>
-      </request>
-    </VoidCreditCardTransaction>
+  <VoidCreditCardTransaction xmlns="https://www.pagador.com.br/webservice/pagador">
+  <request>
+    <RequestId>{{ request_id }}</RequestId>
+    <MerchantId>{{ merchant_id }}</MerchantId>
+    <Version>1.0</Version>
+    <TransactionDataCollection>
+      <TransactionDataRequest>
+        <BraspagTransactionId>{{ braspag_transaction_id }}</BraspagTransactionId>
+        <Amount>{{ amount }}</Amount>
+      </TransactionDataRequest>
+    </TransactionDataCollection>
+  </request>
+  </VoidCreditCardTransaction>
   </soap:Body>
 </soap:Envelope>
