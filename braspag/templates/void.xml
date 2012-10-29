@@ -1,0 +1,9 @@
+{% extends 'authorize.xml' %}
+
+{% block request %}
+<MerchantId>{{ merchant_id }}</MerchantId>
+<TransactionDataCollection>
+    <BraspagTransactionId>{{ braspag_transaction_id }}</BraspagTransactionId>
+    <Amount>{{ amount }}</Amount>
+</TransactionDataCollection>
+{% endblock %}

@@ -188,7 +188,7 @@ class BraspagResponse(object):
 
 def webservice_request(xml,url):
     WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
-    
+
     if isinstance(xml, unicode):
         xml = xml.encode('utf-8')
 
@@ -256,3 +256,24 @@ def authorize_transaction(data_dict,production=True):
         url = 'homologacao.pagador.com.br'
 
     return webservice_request(xml_request,url)
+
+
+def void_transaction(data_dict, production=True):
+    assert all(data_dict.get(key), for key in ['request_id',
+                                               'merchant_id',
+                                               'braspag_transaction_id',
+                                               'amount'],
+                                               u'Void Request inválido.')
+
+    template = JINJA_ENV.get_template('void.xml')
+    xml_request = template.render(data_dict)
+    logging.debug(xml_request)
+
+    #TODO: Persistir a URL de request
+    if production:
+        url = 'www.pagador.com.br'
+    else:
+        url = 'homologacao.pagador.com.br'
+
+    return webservice_request(xml_request, url)
+

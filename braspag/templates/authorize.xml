@@ -6,7 +6,8 @@
 
         <RequestId>{{ request_id }}</RequestId>
         <Version>1.0</Version>
-
+        
+        {% block request %}
         <OrderData>
           <MerchantId>{{ merchant_id }}</MerchantId>
           <OrderId>{{ order_id }}</OrderId>
@@ -80,7 +81,7 @@
             <AdditionalDataCollection xsi:nil="true" />
           </PaymentDataRequest>
         </PaymentDataCollection>
-
+        {% endblock %}
       </request>
     </AuthorizeTransaction>
   </soap:Body>
