@@ -200,7 +200,7 @@ def webservice_request(xml,url):
     return BraspagResponse(http.getresponse())
 
 
-def authorize_transaction(data_dict,production=True):
+def authorize_transaction(data_dict, production=True):
 
     assert any((data_dict.get('card_number'), data_dict.get('card_token'))),\
            'card_number ou card_token devem ser fornecidos'
@@ -227,8 +227,8 @@ def authorize_transaction(data_dict,production=True):
     if not data_dict.get('payment_plan'):
 
         if number_of_payments > 1:
-            # 2 = parcelado pelo emissor do cartão
-            data_dict['payment_plan'] = 2
+            # 1 = parcelado pelo estabelecimento
+            data_dict['payment_plan'] = 1
         else:
             # 0 = a vista
             data_dict['payment_plan'] = 0
