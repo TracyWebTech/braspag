@@ -1,9 +1,13 @@
 # -*- encoding: utf-8 -*-
+
+from __future__ import absolute_import
+
 import httplib
 import logging
 
 import jinja2
 
+from .utils import spaceless
 from xml.dom import minidom
 from xml.etree import ElementTree
 from decimal import Decimal, InvalidOperation
@@ -144,7 +148,8 @@ class BraspagRequest(object):
 
         xml_request = self._render_template('authorize.xml', data_dict)
 
-        return BraspagRequest.webservice_request(xml_request, self.url)
+        return BraspagRequest.webservice_request(spaceless(xml_request),
+                                                 self.url)
 
 
     def void_transaction(self, data_dict):
