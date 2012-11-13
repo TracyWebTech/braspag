@@ -98,6 +98,9 @@ class BraspagRequest(object):
         })
         return BraspagResponse(http.getresponse())
 
+    def request(self, xml_request):
+        return BraspagRequest.webservice_request(spaceless(xml_request),
+                                                 self.url)
 
     def authorize_transaction(self, data_dict):
 
@@ -155,7 +158,7 @@ class BraspagRequest(object):
     def void_transaction(self, data_dict):
         data_dict.update({'cancel_type': 'Void'})
         xml_request = self._render_template('cancel.xml', data_dict)
-        return BraspagRequest.webservice_request(xml_request, self.url)
+        return self.request(xml_request)
 
 
     def refund_transaction(self, data_dict):
