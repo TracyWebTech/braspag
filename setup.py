@@ -15,6 +15,7 @@ setup(
     package_data = {
         'braspag': ['templates/*.xml'],
     },
+    test_suite='tests.suite',
     install_requires=['Jinja2'],
     tests_require=['Mock'],
 )
