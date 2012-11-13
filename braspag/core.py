@@ -153,8 +153,14 @@ class BraspagRequest(object):
 
 
     def void_transaction(self, data_dict):
-        #TODO: Validate void fields
-        xml_request = self._render_template('void.xml', data_dict)
+        data_dict.update({'cancel_type': 'Void'})
+        xml_request = self._render_template('cancel.xml', data_dict)
+        return BraspagRequest.webservice_request(xml_request, self.url)
+
+
+    def refund_transaction(self, data_dict):
+        data_dict.update({'cancel_type': 'Refund'})
+        xml_request = self._render_template('cancel.xml', data_dict)
         return BraspagRequest.webservice_request(xml_request, self.url)
 
 
