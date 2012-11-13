@@ -12,9 +12,9 @@ from mock import MagicMock, Mock
 
 
 VOID_DATA = 'tests/data/void_request.xml'
+REFUND_DATA = 'tests/data/refund_request.xml'
 
-
-class BraspagRequestVoidTest(unittest.TestCase):
+class BraspagRequestCancelTest(unittest.TestCase):
 
     def setUp(self):
         self.data_dict = {
@@ -27,8 +27,7 @@ class BraspagRequestVoidTest(unittest.TestCase):
         self.request = BraspagRequest()
         BraspagRequest.webservice_request = MagicMock(name='webservice_request')
 
-
-    def test_render_template(self):
+    def test_void_render_template(self):
         self.request._render_template = MagicMock(name='_render_template')
         response = self.request.void_transaction(self.data_dict)
 
@@ -38,7 +37,23 @@ class BraspagRequestVoidTest(unittest.TestCase):
             ])
         )
 
-    def test_webservice_request(self):
+    def test_refund_webservice_request(self):
+        response = self.request.refund_transaction(self.data_dict)
+        with codecs.open(REFUND_DATA, encoding='utf-8') as xml:
+            BraspagRequest.webservice_request.assert_called_once_with(
+                                   spaceless(xml.read()), 'www.pagador.com.br')
+
+    def test_refund_render_template(self):
+        self.request._render_template = MagicMock(name='_render_template')
+        response = self.request.refund_transaction(self.data_dict)
+
+        self.request._render_template.assert_called_once_with('cancel.xml',
+            dict(self.data_dict.items() + [
+                ('cancel_type', 'Refund'),
+            ])
+        )
+
+    def test_void_webservice_request(self):
         response = self.request.void_transaction(self.data_dict)
         with codecs.open(VOID_DATA, encoding='utf-8') as xml:
             BraspagRequest.webservice_request.assert_called_once_with(

@@ -163,7 +163,7 @@ class BraspagRequest(object):
     def refund_transaction(self, data_dict):
         data_dict.update({'cancel_type': 'Refund'})
         xml_request = self._render_template('cancel.xml', data_dict)
-        return BraspagRequest.webservice_request(xml_request, self.url)
+        return self.request(xml_request)
 
 
     def _render_template(self, template_name, data_dict):
