@@ -151,8 +151,7 @@ class BraspagRequest(object):
 
         xml_request = self._render_template('authorize.xml', data_dict)
 
-        return BraspagRequest.webservice_request(spaceless(xml_request),
-                                                 self.url)
+        return self.request(xml_request)
 
 
     def void_transaction(self, data_dict):

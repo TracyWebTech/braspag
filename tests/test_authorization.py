@@ -11,6 +11,9 @@ from braspag.utils import spaceless
 from mock import MagicMock, Mock
 
 
+AUTHORIZATION_DATA = 'tests/data/authorization_request.xml'
+
+
 class BraspagRequestAuthorizeTest(unittest.TestCase):
 
     def setUp(self):
@@ -50,6 +53,6 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
 
     def test_webservice_request(self):
         response = self.request.authorize_transaction(self.data_dict)
-        with codecs.open('tests/data/authorization_request.xml', encoding='utf-8') as xml:
+        with codecs.open(AUTHORIZATION_DATA, encoding='utf-8') as xml:
             BraspagRequest.webservice_request.assert_called_once_with(
                                    spaceless(xml.read()), 'www.pagador.com.br')
