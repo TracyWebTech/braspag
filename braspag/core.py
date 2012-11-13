@@ -73,11 +73,11 @@ class BraspagRequest(object):
         }
     }
 
-    def __init__(self, production=True):
-        if production:
-            self.url = 'www.pagador.com.br'
-        else:
+    def __init__(self, homologation=False):
+        if homologation:
             self.url = 'homologacao.pagador.com.br'
+        else:
+            self.url = 'www.pagador.com.br'
 
         self.jinja_env = jinja2.Environment(
             autoescape=True,
