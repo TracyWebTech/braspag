@@ -17,6 +17,7 @@ from braspag.utils import spaceless
 
 VOID_DATA = 'tests/data/void_request.xml'
 REFUND_DATA = 'tests/data/refund_request.xml'
+CAPTURE_DATA = 'tests/data/capture_request.xml'
 
 
 class RegexpMatcher(object):
@@ -55,9 +56,9 @@ class BraspagRequestCancelTest(unittest.TestCase):
         self.request._render_template = MagicMock(name='_render_template')
         response = self.request.void(**self.data_dict)
 
-        self.request._render_template.assert_called_once_with('cancel.xml',
+        self.request._render_template.assert_called_once_with('base.xml',
             dict(self.data_dict.items() + [
-                ('cancel_type', 'Void'),
+                ('type', 'Void'),
             ])
         )
 
@@ -71,14 +72,30 @@ class BraspagRequestCancelTest(unittest.TestCase):
         self.request._render_template = MagicMock(name='_render_template')
         response = self.request.refund(**self.data_dict)
 
-        self.request._render_template.assert_called_once_with('cancel.xml',
+        self.request._render_template.assert_called_once_with('base.xml',
             dict(self.data_dict.items() + [
-                ('cancel_type', 'Refund'),
+                ('type', 'Refund'),
             ])
         )
 
     def test_refund_webservice_request(self):
         response = self.request.refund(**self.data_dict)
         matcher = RegexpMatcher(REFUND_DATA)
+        BraspagRequest.webservice_request.\
+                        assert_called_once_with(matcher, 'www.pagador.com.br')
+
+    def test_capture_render_template(self):
+        self.request._render_template = MagicMock(name='_render_template')
+        response = self.request.capture(**self.data_dict)
+
+        self.request._render_template.assert_called_once_with('base.xml',
+            dict(self.data_dict.items() + [
+                ('type', 'Capture'),
+            ])
+        )
+
+    def test_capture_webservice_request(self):
+        response = self.request.capture(**self.data_dict)
+        matcher = RegexpMatcher(CAPTURE_DATA)
         BraspagRequest.webservice_request.\
                         assert_called_once_with(matcher, 'www.pagador.com.br')

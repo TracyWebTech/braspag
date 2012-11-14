@@ -160,23 +160,26 @@ class BraspagRequest(object):
 
         return self.request(xml_request)
 
-    def _cancel(self, transaction_id, amount, type=None):
-        assert type in ('Refund', 'Void')
+    def _base_transaction(self, transaction_id, amount, type=None):
+        assert type in ('Refund', 'Void', 'Capture')
         assert is_valid_guid(transaction_id), 'Transaction ID invalido'
 
         data_dict = {
             'amount': amount,
-            'cancel_type': type,
+            'type': type,
             'transaction_id': transaction_id,
         }
-        xml_request = self._render_template('cancel.xml', data_dict)
+        xml_request = self._render_template('base.xml', data_dict)
         return self.request(xml_request)
 
     def void(self, transaction_id, amount=0):
-        return self._cancel(transaction_id, amount, 'Void')
+        return self._base_transaction(transaction_id, amount, 'Void')
 
     def refund(self, transaction_id, amount=0):
-        return self._cancel(transaction_id, amount, 'Refund')
+        return self._base_transaction(transaction_id, amount, 'Refund')
+
+    def capture(self, transaction_id, amount=0):
+        return self._base_transaction(transaction_id, amount, 'Capture')
 
     def _render_template(self, template_name, data_dict):
         if self.merchant_id:
