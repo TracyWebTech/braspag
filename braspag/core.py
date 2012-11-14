@@ -15,6 +15,7 @@ from decimal import Decimal, InvalidOperation
 
 
 class BraspagRequest(object):
+    """Testing doc string"""
 
     PAYMENT_METHODS = {
         'Cielo': {
