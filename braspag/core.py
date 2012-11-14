@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import
 
+import uuid
 import httplib
 import logging
 
@@ -73,11 +74,13 @@ class BraspagRequest(object):
         }
     }
 
-    def __init__(self, homologation=False):
+    def __init__(self, merchant_id=None, homologation=False):
         if homologation:
             self.url = 'homologacao.pagador.com.br'
         else:
             self.url = 'www.pagador.com.br'
+
+        self.merchant_id = merchant_id
 
         self.jinja_env = jinja2.Environment(
             autoescape=True,
@@ -167,6 +170,12 @@ class BraspagRequest(object):
 
 
     def _render_template(self, template_name, data_dict):
+        if self.merchant_id:
+            data_dict['merchant_id'] = self.merchant_id
+
+        if not data_dict.has_key('request_id'):
+            data_dict['request_id'] = unicode(uuid.uuid1())
+
         template = self.jinja_env.get_template(template_name)
         xml_request = template.render(data_dict)
         logging.debug(xml_request)
