@@ -17,7 +17,7 @@ AUTHORIZATION_DATA = 'tests/data/authorization_request.xml'
 class BraspagRequestAuthorizeTest(unittest.TestCase):
 
     def setUp(self):
-        payment_method = BraspagRequest.PAYMENT_METHODS['Simulated']['BRL']
+        payment_method = BraspagRequest._PAYMENT_METHODS['Simulated']['BRL']
         merchant_id = '12345678-1234-1234-1234-1234567890AB'
         self.data_dict = {
             'request_id': '782a56e2-2dae-11e2-b3ee-080027d29772',
@@ -34,7 +34,7 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
         }
 
         self.request = BraspagRequest(merchant_id=merchant_id)
-        BraspagRequest.webservice_request = MagicMock(name='webservice_request')
+        BraspagRequest._webservice_request = MagicMock(name='webservice_request')
 
 
     def test_render_template(self):
@@ -52,7 +52,7 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
         )
 
     def test_webservice_request(self):
-        response = self.request.authorize_transaction(self.data_dict)
+        response = self.request.authorize(self.data_dict)
         with codecs.open(AUTHORIZATION_DATA, encoding='utf-8') as xml:
-            BraspagRequest.webservice_request.assert_called_once_with(
+            BraspagRequest._webservice_request.assert_called_once_with(
                                    spaceless(xml.read()), 'www.pagador.com.br')

@@ -15,9 +15,13 @@ from decimal import Decimal, InvalidOperation
 
 
 class BraspagRequest(object):
-    """Testing doc string"""
+    """Implements Braspag Pagador API (manual version 1.9). 
+    
+    Boleto generation is not implemented yet. 
 
-    PAYMENT_METHODS = {
+    """
+
+    _PAYMENT_METHODS = {
         'Cielo': {
             'Visa Electron': '123',
             'Visa': 500,
@@ -89,7 +93,7 @@ class BraspagRequest(object):
         )
 
     @staticmethod
-    def webservice_request(xml, url):
+    def _webservice_request(xml, url):
         WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
 
         if isinstance(xml, unicode):
@@ -102,13 +106,9 @@ class BraspagRequest(object):
         })
         return BraspagResponse(http.getresponse())
 
-    def request(self, xml_request):
-        return BraspagRequest.webservice_request(spaceless(xml_request),
+    def _request(self, xml_request):
+        return BraspagRequest._webservice_request(spaceless(xml_request),
                                                  self.url)
-
-    def authorize_transaction(self, data_dict):
-        #TODO: raise deprecation warning
-        return self.authorize(data_dict)
 
     def authorize(self, data_dict):
 
@@ -159,7 +159,7 @@ class BraspagRequest(object):
 
         xml_request = self._render_template('authorize.xml', data_dict)
 
-        return self.request(xml_request)
+        return self._request(xml_request)
 
     def _base_transaction(self, transaction_id, amount, type=None):
         assert type in ('Refund', 'Void', 'Capture')
@@ -171,7 +171,7 @@ class BraspagRequest(object):
             'transaction_id': transaction_id,
         }
         xml_request = self._render_template('base.xml', data_dict)
-        return self.request(xml_request)
+        return self._request(xml_request)
 
     def void(self, transaction_id, amount=0):
         return self._base_transaction(transaction_id, amount, 'Void')
@@ -197,7 +197,7 @@ class BraspagRequest(object):
 
 class BraspagResponse(object):
 
-    STATUS = [
+    _STATUS = [
         (0, 'Captured'),
         (1, 'Authorized'),
         (2, 'Not Authorized'),
@@ -205,7 +205,7 @@ class BraspagResponse(object):
         (4, 'Waiting for Answer'),
     ]
 
-    NAMESPACE = 'https://www.pagador.com.br/webservice/pagador'
+    _NAMESPACE = 'https://www.pagador.com.br/webservice/pagador'
 
     def __init__(self, http_reponse):
         if http_reponse.status != 200:
@@ -237,13 +237,13 @@ class BraspagResponse(object):
         self.return_code = self._get_int('ReturnCode')
         self.return_message = self._get_text('ReturnMessage')
         self.card_token = self._get_text('CreditCardToken')
-        self.status = BraspagResponse.STATUS[self._get_int('Status')]
+        self.status = BraspagResponse._STATUS[self._get_int('Status')]
 
     def _get_text(self, field, node=None):
         if node is None:
             node = self.root
         xml_tag = node.find('.//{{{0}}}{1}'.format(
-                                            BraspagResponse.NAMESPACE, field))
+                                            BraspagResponse._NAMESPACE, field))
         if xml_tag is not None:
             if xml_tag.text is not None:
                 return xml_tag.text.strip()
@@ -266,7 +266,7 @@ class BraspagResponse(object):
     def _get_errors(self):
         errors = []
         xml_errors = self.root.findall('.//{{{0}}}ErrorReportDataResponse'.\
-                                             format(BraspagResponse.NAMESPACE))
+                                             format(BraspagResponse._NAMESPACE))
         for error_node in xml_errors:
             code = self._get_text('ErrorCode', error_node)
             msg = self._get_text('ErrorMessage', error_node)

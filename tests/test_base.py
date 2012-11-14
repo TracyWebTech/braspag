@@ -50,7 +50,7 @@ class BraspagRequestCancelTest(unittest.TestCase):
         }
 
         self.request = BraspagRequest(merchant_id=merchant_id)
-        BraspagRequest.webservice_request = MagicMock(name='webservice_request')
+        BraspagRequest._webservice_request = MagicMock(name='webservice_request')
 
     def test_void_render_template(self):
         self.request._render_template = MagicMock(name='_render_template')
@@ -65,7 +65,7 @@ class BraspagRequestCancelTest(unittest.TestCase):
     def test_void_webservice_request(self):
         response = self.request.void(**self.data_dict)
         matcher = RegexpMatcher(VOID_DATA)
-        BraspagRequest.webservice_request.\
+        BraspagRequest._webservice_request.\
                         assert_called_once_with(matcher, 'www.pagador.com.br')
 
     def test_refund_render_template(self):
@@ -81,7 +81,7 @@ class BraspagRequestCancelTest(unittest.TestCase):
     def test_refund_webservice_request(self):
         response = self.request.refund(**self.data_dict)
         matcher = RegexpMatcher(REFUND_DATA)
-        BraspagRequest.webservice_request.\
+        BraspagRequest._webservice_request.\
                         assert_called_once_with(matcher, 'www.pagador.com.br')
 
     def test_capture_render_template(self):
@@ -97,5 +97,5 @@ class BraspagRequestCancelTest(unittest.TestCase):
     def test_capture_webservice_request(self):
         response = self.request.capture(**self.data_dict)
         matcher = RegexpMatcher(CAPTURE_DATA)
-        BraspagRequest.webservice_request.\
+        BraspagRequest._webservice_request.\
                         assert_called_once_with(matcher, 'www.pagador.com.br')
