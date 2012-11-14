@@ -8,7 +8,7 @@ import logging
 
 import jinja2
 
-from .utils import spaceless
+from .utils import spaceless, is_valid_guid
 from xml.dom import minidom
 from xml.etree import ElementTree
 from decimal import Decimal, InvalidOperation
@@ -106,6 +106,10 @@ class BraspagRequest(object):
                                                  self.url)
 
     def authorize_transaction(self, data_dict):
+        #TODO: raise deprecation warning
+        return self.authorize(data_dict)
+
+    def authorize(self, data_dict):
 
         assert any((data_dict.get('card_number'),
                     data_dict.get('card_token'))),\
@@ -156,18 +160,23 @@ class BraspagRequest(object):
 
         return self.request(xml_request)
 
+    def _cancel(self, transaction_id, amount, type=None):
+        assert type in ('Refund', 'Void')
+        assert is_valid_guid(transaction_id), 'Transaction ID invalido'
 
-    def void_transaction(self, data_dict):
-        data_dict.update({'cancel_type': 'Void'})
+        data_dict = {
+            'amount': amount,
+            'cancel_type': type,
+            'transaction_id': transaction_id,
+        }
         xml_request = self._render_template('cancel.xml', data_dict)
         return self.request(xml_request)
 
+    def void(self, transaction_id, amount=0):
+        return self._cancel(transaction_id, amount, 'Void')
 
-    def refund_transaction(self, data_dict):
-        data_dict.update({'cancel_type': 'Refund'})
-        xml_request = self._render_template('cancel.xml', data_dict)
-        return self.request(xml_request)
-
+    def refund(self, transaction_id, amount=0):
+        return self._cancel(transaction_id, amount, 'Refund')
 
     def _render_template(self, template_name, data_dict):
         if self.merchant_id:

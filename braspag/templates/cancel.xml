@@ -8,7 +8,7 @@
         <Version>1.0</Version>
         <TransactionDataCollection>
           <TransactionDataRequest>
-            <BraspagTransactionId>{{ braspag_transaction_id }}</BraspagTransactionId>
+            <BraspagTransactionId>{{ transaction_id }}</BraspagTransactionId>
             <Amount>{{ amount }}</Amount>
           </TransactionDataRequest>
         </TransactionDataCollection>

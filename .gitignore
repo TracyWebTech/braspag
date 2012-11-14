@@ -28,3 +28,6 @@ pip-log.txt
 
 # Vim swap files
 *.swp
+
+# Documentaion build files
+docs/_build

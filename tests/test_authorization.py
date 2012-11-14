@@ -18,9 +18,9 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
 
     def setUp(self):
         payment_method = BraspagRequest.PAYMENT_METHODS['Simulated']['BRL']
+        merchant_id = '12345678-1234-1234-1234-1234567890AB'
         self.data_dict = {
             'request_id': '782a56e2-2dae-11e2-b3ee-080027d29772',
-            'merchant_id': '12345678-1234-1234-1234-1234567890AB',
             'order_id': '782b632a-2dae-11e2-b3ee-080027d29772',
             'customer_id': '12345678900',
             'customer_name': u'José da Silva',
@@ -33,13 +33,13 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
             'card_exp_date': '05/2018',
         }
 
-        self.request = BraspagRequest()
+        self.request = BraspagRequest(merchant_id=merchant_id)
         BraspagRequest.webservice_request = MagicMock(name='webservice_request')
 
 
     def test_render_template(self):
         self.request._render_template = MagicMock(name='_render_template')
-        response = self.request.authorize_transaction(self.data_dict)
+        response = self.request.authorize(self.data_dict)
 
         self.request._render_template.assert_called_once_with('authorize.xml',
             dict(self.data_dict.items() + [
