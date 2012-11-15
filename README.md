@@ -17,7 +17,7 @@ The following dependencies are automaticatly installed by the setup.py:
 
 # Documentation
 
-https://readthedocs.org/projects/braspag/
+https://braspag.readthedocs.org/
 
 # LICENSE
 
