@@ -264,6 +264,24 @@ with `transaction_types` 1 or 3.
 
 
 class BraspagResponse(object):
+    """ TODO:
+
+.. attribute:: correlation_id
+.. attribute:: errors
+.. attribute:: success
+.. attribute:: order_id
+.. attribute:: braspag_order_id
+.. attribute:: transaction_id
+.. attribute:: payment_method
+.. attribute:: amount
+.. attribute:: acquirer_transaction_id
+.. attribute:: authorization_code
+.. attribute:: return_code
+.. attribute:: return_message
+.. attribute:: card_token
+.. attribute:: status
+
+    """
 
     _STATUS = [
         (0, 'Captured'),
@@ -279,6 +297,19 @@ class BraspagResponse(object):
         if http_reponse.status != 200:
             raise BraspagHttpResponseException(http_reponse.status,
                                                http_reponse.reason)
+
+        # Ensure all attributes are set before returning
+        self.order_id = None
+        self.braspag_order_id = None
+        self.transaction_id = None
+        self.payment_method = None
+        self.amount = None
+        self.acquirer_transaction_id = None
+        self.authorization_code = None
+        self.return_code = None
+        self.return_message = None
+        self.card_token = None
+        self.status = None
 
         xml_response = http_reponse.read()
         self.root = ElementTree.fromstring(xml_response)
