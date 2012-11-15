@@ -255,7 +255,7 @@ and/or returned by responses.
 :arg transaction_type: An integer representing one of the
                        :ref:`transaction_types`. *Default: 2*.
 :arg payment_plan: An integer representing how multiple payments should
-                   be handled. :ref:`payment_plans`. *Default: 0*.
+                   be handled. *Default: 0*. See :ref:`payment_plans`.
 :arg payment_method: Integer representing one of the
                      available :ref:`payment_methods`.
 
