@@ -39,7 +39,7 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
 
     def test_render_template(self):
         self.request._render_template = MagicMock(name='_render_template')
-        response = self.request.authorize(self.data_dict)
+        response = self.request.authorize(**self.data_dict)
 
         self.request._render_template.assert_called_once_with('authorize.xml',
             dict(self.data_dict.items() + [
@@ -52,7 +52,7 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
         )
 
     def test_webservice_request(self):
-        response = self.request.authorize(self.data_dict)
+        response = self.request.authorize(**self.data_dict)
         with codecs.open(AUTHORIZATION_DATA, encoding='utf-8') as xml:
             BraspagRequest._webservice_request.assert_called_once_with(
                                    spaceless(xml.read()), 'www.pagador.com.br')

@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    braspag
+   payment_methods
 
 
 Indices and tables

@@ -15,15 +15,15 @@ from decimal import Decimal, InvalidOperation
 
 
 class BraspagRequest(object):
-    """Implements Braspag Pagador API (manual version 1.9). 
-    
-    Boleto generation is not implemented yet. 
+    """Implements Braspag Pagador API (manual version 1.9).
+
+    Boleto generation is not implemented yet.
 
     """
 
     _PAYMENT_METHODS = {
         'Cielo': {
-            'Visa Electron': '123',
+            'Visa Electron': 123,
             'Visa': 500,
             'MasterCard': 501,
             'Amex': 502,
@@ -110,54 +110,184 @@ class BraspagRequest(object):
         return BraspagRequest._webservice_request(spaceless(xml_request),
                                                  self.url)
 
-    def authorize(self, data_dict):
+    def authorize(self, **kwargs):
+        """All arguments supplied to this method must be keyword arguments.
 
-        assert any((data_dict.get('card_number'),
-                    data_dict.get('card_token'))),\
+**order_id**: Order id. It will be used to indentify the order later
+in Braspag.
+
+**customer_id**: Must be user's CPF/CNPJ.
+
+**customer_name**: User's full name.
+
+**customer_email**: User's email address.
+
+**amount**: Amount to charge.
+
+**card_holder**: Name printed on card.
+
+**card_number**: Card number.
+
+**card_security_code**: Card security code.
+
+**card_exp_date**: Card expiration date.
+
+**save_card**: Flag that tell to Braspag to store card number.
+If set to True Reponse will return a card token. *Default: False*.
+
+**card_token**: Card token returned by Braspag. When used it
+should replace *card_holder*, *card_exp_date*, *card_number*
+and *card_security_code*.
+
+**number_of_payments**: Number of payments that the amount will
+be devided (number of months). *Default: 1*.
+
+**currency**: Currency of the given amount. *Default: BRL*.
+
+**country**: User's country. *Default: BRA*.
+
+**transaction_type**: An integer representing the transation type:
+
+   - 1: Pre-authorization
+   - 2: Automatic capture *(default)*
+   - 3: Pre-authorization with authentication
+   - 4: Automatic capture with authentication
+
+**payment_plan**: An integer representing how multiple payments should be
+handled:
+
+   - 0: One time payment (default)
+   - 1: Many payments - interests will be charged directly from customer
+   - 2: Many payments - interests will be charged from establishment
+
+**payment_method**: Integer representing payment methods.
+
+   +-----+---------------------------------------+
+   |Code |Payment Method                         |
+   +=====+=======================================+
+   | 123 |Cielo Visa Electron                    |
+   +-----+---------------------------------------+
+   | 500 |Cielo Visa                             |
+   +-----+---------------------------------------+
+   | 501 |Cielo MasterCard                       |
+   +-----+---------------------------------------+
+   | 502 |Cielo Amex                             |
+   +-----+---------------------------------------+
+   | 503 |Cielo Diners                           |
+   +-----+---------------------------------------+
+   | 504 |Cielo Elo                              |
+   +-----+---------------------------------------+
+   | 505 |Banorte Visa                           |
+   +-----+---------------------------------------+
+   | 506 |Banorte MasterCard                     |
+   +-----+---------------------------------------+
+   | 507 |Banorte Diners                         |
+   +-----+---------------------------------------+
+   | 508 |Banorte Amex                           |
+   +-----+---------------------------------------+
+   | 509 |Redecard Visa                          |
+   +-----+---------------------------------------+
+   | 510 |Redecard MasterCard                    |
+   +-----+---------------------------------------+
+   | 511 |Redecard Diners                        |
+   +-----+---------------------------------------+
+   | 512 |PagosOnLine Visa                       |
+   +-----+---------------------------------------+
+   | 513 |PagosOnLine MasterCard                 |
+   +-----+---------------------------------------+
+   | 514 |PagosOnLine Amex                       |
+   +-----+---------------------------------------+
+   | 515 |PagosOnLine Diners                     |
+   +-----+---------------------------------------+
+   | 516 |Payvision Visa                         |
+   +-----+---------------------------------------+
+   | 517 |Payvision MasterCard                   |
+   +-----+---------------------------------------+
+   | 518 |Payvision Diners                       |
+   +-----+---------------------------------------+
+   | 519 |Payvision Amex                         |
+   +-----+---------------------------------------+
+   | 520 |Banorte Cargos Automaticos Visa        |
+   +-----+---------------------------------------+
+   | 521 |Banorte Cargos Automaticos MasterCard  |
+   +-----+---------------------------------------+
+   | 522 |Banorte Cargos Automaticos Diners      |
+   +-----+---------------------------------------+
+   | 523 |Amex 2P                                |
+   +-----+---------------------------------------+
+   | 524 |SITEF Visa                             |
+   +-----+---------------------------------------+
+   | 525 |SITEF MasterCard                       |
+   +-----+---------------------------------------+
+   | 526 |SITEF Amex                             |
+   +-----+---------------------------------------+
+   | 527 |SITEF Diners                           |
+   +-----+---------------------------------------+
+   | 528 |SITEF HiperCard                        |
+   +-----+---------------------------------------+
+   | 529 |SITEF Leader                           |
+   +-----+---------------------------------------+
+   | 530 |SITEF Aura                             |
+   +-----+---------------------------------------+
+   | 531 |SITEF Santander Visa                   |
+   +-----+---------------------------------------+
+   | 532 |SITEF Santander MasterCard             |
+   +-----+---------------------------------------+
+   | 995 |Simulated USD                          |
+   +-----+---------------------------------------+
+   | 996 |Simulated EUR                          |
+   +-----+---------------------------------------+
+   | 997 |Simulated BRL                          |
+   +-----+---------------------------------------+
+
+        """
+
+        assert any((kwargs.get('card_number'),
+                    kwargs.get('card_token'))),\
                     'card_number ou card_token devem ser fornecidos'
 
-        if data_dict.get('card_number'):
+        if kwargs.get('card_number'):
             card_keys = (
                 'card_holder',
                 'card_security_code',
                 'card_exp_date',
                 'card_number',
             )
-            assert all(data_dict.has_key(key) for key in card_keys), \
+            assert all(kwargs.has_key(key) for key in card_keys), \
                 (u'Transações com Cartão de Crédito exigem os '
                 u'parametros: {0}'.format(' ,'.join(card_keys)))
 
-        if not data_dict.get('number_of_payments'):
-            data_dict['number_of_payments'] = 1
+        if not kwargs.get('number_of_payments'):
+            kwargs['number_of_payments'] = 1
 
         try:
-            number_of_payments = int(data_dict.get('number_of_payments'))
+            number_of_payments = int(kwargs.get('number_of_payments'))
         except ValueError:
             raise BraspagException('Number of payments must be int.')
 
-        if not data_dict.get('payment_plan'):
+        if not kwargs.get('payment_plan'):
 
             if number_of_payments > 1:
                 # 2 = parcelado pelo emissor do cartão
-                data_dict['payment_plan'] = 2
+                kwargs['payment_plan'] = 2
             else:
                 # 0 = a vista
-                data_dict['payment_plan'] = 0
+                kwargs['payment_plan'] = 0
 
-        if not data_dict.get('currency'):
-            data_dict['currency'] = 'BRL'
+        if not kwargs.get('currency'):
+            kwargs['currency'] = 'BRL'
 
-        if not data_dict.get('country'):
-            data_dict['country'] = 'BRA'
+        if not kwargs.get('country'):
+            kwargs['country'] = 'BRA'
 
-        if not data_dict.get('transaction_type'):
+        if not kwargs.get('transaction_type'):
             # 2 = captura automatica
-            data_dict['transaction_type'] = 2
+            kwargs['transaction_type'] = 2
 
-        if data_dict.get('save_card', False):
-            data_dict['save_card'] = 'true'
+        if kwargs.get('save_card', False):
+            kwargs['save_card'] = 'true'
 
-        xml_request = self._render_template('authorize.xml', data_dict)
+        xml_request = self._render_template('authorize.xml', kwargs)
 
         return self._request(xml_request)
 

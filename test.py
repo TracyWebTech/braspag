@@ -1,23 +1,17 @@
-# -*- encoding: utf-8 -*-
+
 from braspag.core import BraspagRequest
-import uuid
 
-data_dict = {
-    'request_id': uuid.uuid1(),
-    'merchant_id':'12345678-1234-1234-1234-1234567890AB',
-    'order_id': uuid.uuid1(),
-    'customer_id': '12345678900',
-    'customer_name': u'José da Silva',
-    'customer_email': 'jose123@dasilva.com.br',
-    'payment_method': BraspagRequest.PAYMENT_METHODS['Simulated']['BRL'],
-    'amount': 10000,
-    'card_token': '0202448c-3b90-4395-b562-b98be24687f9',
-}
+payment_methods = []
 
-import logging
-logging.root.setLevel(logging.DEBUG)
-request = BraspagRequest(production=False)
-response = request.authorize_transaction(data_dict)
+for company, methods in BraspagRequest._PAYMENT_METHODS.items():
+    for card, code in methods.items():
+        payment_methods.append((code, '{0} {1}'.format(company, card)))
 
-import pprint
-pprint.pprint(response.__dict__)
+payment_methods.sort()
+
+print '+' + 5 * '-' + '+' + 50 * '-' + '+'
+print '|{0:^5}|{1:<50}|'.format('Code', 'Payment Method')
+print '+' + 5 * '=' + '+' + 50 * '=' + '+'
+for code, method in payment_methods:
+    print '|{0:^5}|{1:<50}|'.format(code, method)
+print '+' + 5 * '-' + '+' + 50 * '-' + '+'

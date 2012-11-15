@@ -1,13 +1,17 @@
-braspag Package
+braspag
 ===============
 
-:mod:`core` Module
-------------------
+.. autoclass:: braspag.core.BraspagRequest
+    :members:
+    :exclude-members: authorize
+    :undoc-members:
 
-.. automodule:: braspag.core
+    .. automethod:: braspag.core.BraspagRequest.authorize(order_id, customer_id, customer_name, customer_email, amount, card_holder, card_number, card_security_code, card_exp_date, save_card, card_token, number_of_payments, payment_method, payment_plan, transaction_type=2, currency='BRL', country='BRA')
+
+
+.. autoclass:: braspag.core.BraspagResponse
     :members:
     :undoc-members:
-    :show-inheritance:
 
 :mod:`exceptions` Module
 ------------------------
