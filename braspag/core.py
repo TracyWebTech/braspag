@@ -17,7 +17,125 @@ from decimal import Decimal, InvalidOperation
 class BraspagRequest(object):
     """Implements Braspag Pagador API (manual version 1.9).
 
-    Boleto generation is not implemented yet.
+Boleto generation is not yet implemented.
+
+
+The following codes contains integer codes that will be needed by requests
+and/or returned by responses.
+
+    .. _transaction_types:
+
+    .. table:: **Transaction Types**
+
+        +-------+---------------------------------------+
+        | Code  | Transaction Type                      |
+        +=======+=======================================+
+        |   1   | Pre-authorization                     |
+        +-------+---------------------------------------+
+        |   2   | Automatic capture                     |
+        +-------+---------------------------------------+
+        |   3   | Pre-authorization with authentication |
+        +-------+---------------------------------------+
+        |   4   | Automatic capture with authentication |
+        +-------+---------------------------------------+
+
+
+    .. _payment_plans:
+
+    .. table:: **Payment Plans**
+
+        +-------+--------------------------------------------------------------+
+        | Code  | Payment Plan                                                 |
+        +=======+==============================================================+
+        |   0   | One time payment                                             |
+        +-------+--------------------------------------------------------------+
+        |   1   | Many payments - interests will be charged from customer      |
+        +-------+--------------------------------------------------------------+
+        |   2   | Many payments - interests will be charged from establishment |
+        +-------+--------------------------------------------------------------+
+
+
+    .. _payment_methods:
+
+    .. table:: **Payment Methods**
+
+        +-----+---------------------------------------+
+        |Code |Payment Method                         |
+        +=====+=======================================+
+        | 123 |Cielo Visa Electron                    |
+        +-----+---------------------------------------+
+        | 500 |Cielo Visa                             |
+        +-----+---------------------------------------+
+        | 501 |Cielo MasterCard                       |
+        +-----+---------------------------------------+
+        | 502 |Cielo Amex                             |
+        +-----+---------------------------------------+
+        | 503 |Cielo Diners                           |
+        +-----+---------------------------------------+
+        | 504 |Cielo Elo                              |
+        +-----+---------------------------------------+
+        | 505 |Banorte Visa                           |
+        +-----+---------------------------------------+
+        | 506 |Banorte MasterCard                     |
+        +-----+---------------------------------------+
+        | 507 |Banorte Diners                         |
+        +-----+---------------------------------------+
+        | 508 |Banorte Amex                           |
+        +-----+---------------------------------------+
+        | 509 |Redecard Visa                          |
+        +-----+---------------------------------------+
+        | 510 |Redecard MasterCard                    |
+        +-----+---------------------------------------+
+        | 511 |Redecard Diners                        |
+        +-----+---------------------------------------+
+        | 512 |PagosOnLine Visa                       |
+        +-----+---------------------------------------+
+        | 513 |PagosOnLine MasterCard                 |
+        +-----+---------------------------------------+
+        | 514 |PagosOnLine Amex                       |
+        +-----+---------------------------------------+
+        | 515 |PagosOnLine Diners                     |
+        +-----+---------------------------------------+
+        | 516 |Payvision Visa                         |
+        +-----+---------------------------------------+
+        | 517 |Payvision MasterCard                   |
+        +-----+---------------------------------------+
+        | 518 |Payvision Diners                       |
+        +-----+---------------------------------------+
+        | 519 |Payvision Amex                         |
+        +-----+---------------------------------------+
+        | 520 |Banorte Cargos Automaticos Visa        |
+        +-----+---------------------------------------+
+        | 521 |Banorte Cargos Automaticos MasterCard  |
+        +-----+---------------------------------------+
+        | 522 |Banorte Cargos Automaticos Diners      |
+        +-----+---------------------------------------+
+        | 523 |Amex 2P                                |
+        +-----+---------------------------------------+
+        | 524 |SITEF Visa                             |
+        +-----+---------------------------------------+
+        | 525 |SITEF MasterCard                       |
+        +-----+---------------------------------------+
+        | 526 |SITEF Amex                             |
+        +-----+---------------------------------------+
+        | 527 |SITEF Diners                           |
+        +-----+---------------------------------------+
+        | 528 |SITEF HiperCard                        |
+        +-----+---------------------------------------+
+        | 529 |SITEF Leader                           |
+        +-----+---------------------------------------+
+        | 530 |SITEF Aura                             |
+        +-----+---------------------------------------+
+        | 531 |SITEF Santander Visa                   |
+        +-----+---------------------------------------+
+        | 532 |SITEF Santander MasterCard             |
+        +-----+---------------------------------------+
+        | 995 |Simulated USD                          |
+        +-----+---------------------------------------+
+        | 996 |Simulated EUR                          |
+        +-----+---------------------------------------+
+        | 997 |Simulated BRL                          |
+        +-----+---------------------------------------+
 
     """
 
@@ -113,145 +231,33 @@ class BraspagRequest(object):
     def authorize(self, **kwargs):
         """All arguments supplied to this method must be keyword arguments.
 
-**order_id**: Order id. It will be used to indentify the order later
-in Braspag.
+:arg order_id: Order id. It will be used to indentify the
+               order later in Braspag.
+:arg customer_id: Must be user's CPF/CNPJ.
+:arg customer_name: User's full name.
+:arg customer_email: User's email address.
+:arg amount: Amount to charge.
 
-**customer_id**: Must be user's CPF/CNPJ.
-
-**customer_name**: User's full name.
-
-**customer_email**: User's email address.
-
-**amount**: Amount to charge.
-
-**card_holder**: Name printed on card.
-
-**card_number**: Card number.
-
-**card_security_code**: Card security code.
-
-**card_exp_date**: Card expiration date.
-
-**save_card**: Flag that tell to Braspag to store card number.
-If set to True Reponse will return a card token. *Default: False*.
-
-**card_token**: Card token returned by Braspag. When used it
-should replace *card_holder*, *card_exp_date*, *card_number*
-and *card_security_code*.
-
-**number_of_payments**: Number of payments that the amount will
-be devided (number of months). *Default: 1*.
-
-**currency**: Currency of the given amount. *Default: BRL*.
-
-**country**: User's country. *Default: BRA*.
-
-**transaction_type**: An integer representing the transation type:
-
-   +-------+---------------------------------------+
-   | Code  | Transaction Type                      |
-   +=======+=======================================+
-   |   1   | Pre-authorization                     |
-   +-------+---------------------------------------+
-   |   2   | Automatic capture *(default)*         |
-   +-------+---------------------------------------+
-   |   3   | Pre-authorization with authentication |
-   +-------+---------------------------------------+
-   |   4   | Automatic capture with authentication | 
-   +-------+---------------------------------------+
-
-**payment_plan**: An integer representing how multiple payments should be
-handled:
-
-   +-------+------------------------------------------------------------------+
-   | Code  | Payment Plan                                                     |
-   +=======+==================================================================+
-   |   0   | One time payment (default)                                       |
-   +-------+------------------------------------------------------------------+
-   |   1   | Many payments - interests will be charged directly from customer |
-   +-------+------------------------------------------------------------------+
-   |   2   | Many payments - interests will be charged from establishment     |
-   +-------+------------------------------------------------------------------+
-
-**payment_method**: Integer representing payment methods.
-
-   +-----+---------------------------------------+
-   |Code |Payment Method                         |
-   +=====+=======================================+
-   | 123 |Cielo Visa Electron                    |
-   +-----+---------------------------------------+
-   | 500 |Cielo Visa                             |
-   +-----+---------------------------------------+
-   | 501 |Cielo MasterCard                       |
-   +-----+---------------------------------------+
-   | 502 |Cielo Amex                             |
-   +-----+---------------------------------------+
-   | 503 |Cielo Diners                           |
-   +-----+---------------------------------------+
-   | 504 |Cielo Elo                              |
-   +-----+---------------------------------------+
-   | 505 |Banorte Visa                           |
-   +-----+---------------------------------------+
-   | 506 |Banorte MasterCard                     |
-   +-----+---------------------------------------+
-   | 507 |Banorte Diners                         |
-   +-----+---------------------------------------+
-   | 508 |Banorte Amex                           |
-   +-----+---------------------------------------+
-   | 509 |Redecard Visa                          |
-   +-----+---------------------------------------+
-   | 510 |Redecard MasterCard                    |
-   +-----+---------------------------------------+
-   | 511 |Redecard Diners                        |
-   +-----+---------------------------------------+
-   | 512 |PagosOnLine Visa                       |
-   +-----+---------------------------------------+
-   | 513 |PagosOnLine MasterCard                 |
-   +-----+---------------------------------------+
-   | 514 |PagosOnLine Amex                       |
-   +-----+---------------------------------------+
-   | 515 |PagosOnLine Diners                     |
-   +-----+---------------------------------------+
-   | 516 |Payvision Visa                         |
-   +-----+---------------------------------------+
-   | 517 |Payvision MasterCard                   |
-   +-----+---------------------------------------+
-   | 518 |Payvision Diners                       |
-   +-----+---------------------------------------+
-   | 519 |Payvision Amex                         |
-   +-----+---------------------------------------+
-   | 520 |Banorte Cargos Automaticos Visa        |
-   +-----+---------------------------------------+
-   | 521 |Banorte Cargos Automaticos MasterCard  |
-   +-----+---------------------------------------+
-   | 522 |Banorte Cargos Automaticos Diners      |
-   +-----+---------------------------------------+
-   | 523 |Amex 2P                                |
-   +-----+---------------------------------------+
-   | 524 |SITEF Visa                             |
-   +-----+---------------------------------------+
-   | 525 |SITEF MasterCard                       |
-   +-----+---------------------------------------+
-   | 526 |SITEF Amex                             |
-   +-----+---------------------------------------+
-   | 527 |SITEF Diners                           |
-   +-----+---------------------------------------+
-   | 528 |SITEF HiperCard                        |
-   +-----+---------------------------------------+
-   | 529 |SITEF Leader                           |
-   +-----+---------------------------------------+
-   | 530 |SITEF Aura                             |
-   +-----+---------------------------------------+
-   | 531 |SITEF Santander Visa                   |
-   +-----+---------------------------------------+
-   | 532 |SITEF Santander MasterCard             |
-   +-----+---------------------------------------+
-   | 995 |Simulated USD                          |
-   +-----+---------------------------------------+
-   | 996 |Simulated EUR                          |
-   +-----+---------------------------------------+
-   | 997 |Simulated BRL                          |
-   +-----+---------------------------------------+
+:arg card_holder: Name printed on card.
+:arg card_number: Card number.
+:arg card_security_code: Card security code.
+:arg card_exp_date: Card expiration date.
+:arg save_card: Flag that tell to Braspag to store card number.
+                If set to True Reponse will return a card token.
+                *Default: False*.
+:arg card_token: Card token returned by Braspag. When used it
+                 should replace *card_holder*, *card_exp_date*,
+                 *card_number* and *card_security_code*.
+:arg number_of_payments: Number of payments that the amount will
+                         be devided (number of months). *Default: 1*.
+:arg currency: Currency of the given amount. *Default: BRL*.
+:arg country: User's country. *Default: BRA*.
+:arg transaction_type: An integer representing one of the
+                       :ref:`transaction_types`. *Default: 2*.
+:arg payment_plan: An integer representing how multiple payments should
+                   be handled. :ref:`payment_plans`. *Default: 0*.
+:arg payment_method: Integer representing one of the
+                     available :ref:`payment_methods`.
 
         """
 
@@ -323,6 +329,13 @@ handled:
         return self._base_transaction(transaction_id, amount, 'Refund')
 
     def capture(self, transaction_id, amount=0):
+        """Capture the given `amount` from the given transaction_id.
+
+        This method should only be called after pre-authorizing the
+        transaction by calling :meth:`~braspag.BraspagRequest.authorize`
+        with `transaction_types` 1 or 3.
+
+        """
         return self._base_transaction(transaction_id, amount, 'Capture')
 
     def _render_template(self, template_name, data_dict):
