@@ -11,6 +11,9 @@ setup(
     version=__version__,
     description = "Python library to consume Braspag SOAP Web services",
     long_description = readme,
+    author='Sergio Oliveira',
+    author_email='sergio@tracy.com.br',
+    url='https://github.com/TracyWebTech/braspag',
     packages=['braspag'],
     package_data = {
         'braspag': ['templates/*.xml'],
