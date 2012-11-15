@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import uuid
 import codecs
 import unittest
-from braspag.core import BraspagRequest
+from braspag import BraspagRequest
 from braspag.utils import spaceless
 
 from mock import MagicMock, Mock

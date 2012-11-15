@@ -11,7 +11,7 @@ from xml.dom import minidom
 
 from mock import MagicMock, Mock
 
-from braspag.core import BraspagRequest
+from braspag import BraspagRequest
 from braspag.utils import spaceless
 
 
