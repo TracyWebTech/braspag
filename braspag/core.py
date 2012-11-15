@@ -148,17 +148,30 @@ be devided (number of months). *Default: 1*.
 
 **transaction_type**: An integer representing the transation type:
 
-   - 1: Pre-authorization
-   - 2: Automatic capture *(default)*
-   - 3: Pre-authorization with authentication
-   - 4: Automatic capture with authentication
+   +-------+---------------------------------------+
+   | Code  | Transaction Type                      |
+   +=======+=======================================+
+   |   1   | Pre-authorization                     |
+   +-------+---------------------------------------+
+   |   2   | Automatic capture *(default)*         |
+   +-------+---------------------------------------+
+   |   3   | Pre-authorization with authentication |
+   +-------+---------------------------------------+
+   |   4   | Automatic capture with authentication | 
+   +-------+---------------------------------------+
 
 **payment_plan**: An integer representing how multiple payments should be
 handled:
 
-   - 0: One time payment (default)
-   - 1: Many payments - interests will be charged directly from customer
-   - 2: Many payments - interests will be charged from establishment
+   +-------+------------------------------------------------------------------+
+   | Code  | Payment Plan                                                     |
+   +=======+==================================================================+
+   |   0   | One time payment (default)                                       |
+   +-------+------------------------------------------------------------------+
+   |   1   | Many payments - interests will be charged directly from customer |
+   +-------+------------------------------------------------------------------+
+   |   2   | Many payments - interests will be charged from establishment     |
+   +-------+------------------------------------------------------------------+
 
 **payment_method**: Integer representing payment methods.
 
