@@ -143,7 +143,7 @@ Boleto generation is not yet implemented.
 
 :returns: :class:`~braspag.BraspagResponse`
 
-        """
+"""
 
         assert any((kwargs.get('card_number'),
                     kwargs.get('card_token'))),\

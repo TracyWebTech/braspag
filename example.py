@@ -6,12 +6,13 @@ import logging
 from pprint import pformat
 from braspag.core import BraspagRequest
 
+MERCHANT_ID = u'12345678-1234-1234-1234-1234567890AB'
 
 logging.root.setLevel(logging.DEBUG)
-request = BraspagRequest(homologation=True)
+
+request = BraspagRequest(merchant_id=MERCHANT_ID, homologation=True)
+
 response = request.authorize(
-    request_id=uuid.uuid1(),
-    merchant_id=u'12345678-1234-1234-1234-1234567890AB',
     order_id=uuid.uuid4(),
     customer_id=u'12345678900',
     customer_name=u'José da Silva',
