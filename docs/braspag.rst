@@ -1,7 +1,7 @@
 Python Braspag Lib
 ===================
 
-Request Object
+Request object
 ---------------
 
 .. autoclass:: braspag.BraspagRequest
@@ -48,7 +48,7 @@ The `amount` given should be an integer where the 2 last digits
 will represent the decimal places.
 
 
-Response Object
+Response object
 -----------------
 
 .. autoclass:: braspag.BraspagResponse
