@@ -1,5 +1,8 @@
-braspag
-===============
+Python Braspag Lib
+===================
+
+BraspagRequest
+---------------
 
 .. autoclass:: braspag.BraspagRequest
     :members:
@@ -7,6 +10,9 @@ braspag
     :undoc-members:
 
     .. automethod:: braspag.core.BraspagRequest.authorize(order_id, customer_id, customer_name, customer_email, amount, card_holder, card_number, card_security_code, card_exp_date, save_card, card_token, number_of_payments, payment_method, payment_plan, transaction_type=2, currency='BRL', country='BRA')
+
+BraspagResponse
+-----------------
 
 .. autoclass:: braspag.BraspagResponse
     :members:

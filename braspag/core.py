@@ -19,124 +19,6 @@ class BraspagRequest(object):
 
 Boleto generation is not yet implemented.
 
-
-The following codes contains integer codes that will be needed by requests
-and/or returned by responses.
-
-    .. _transaction_types:
-
-    .. table:: **Transaction Types**
-
-        +-------+---------------------------------------+
-        | Code  | Transaction Type                      |
-        +=======+=======================================+
-        |   1   | Pre-authorization                     |
-        +-------+---------------------------------------+
-        |   2   | Automatic capture                     |
-        +-------+---------------------------------------+
-        |   3   | Pre-authorization with authentication |
-        +-------+---------------------------------------+
-        |   4   | Automatic capture with authentication |
-        +-------+---------------------------------------+
-
-
-    .. _payment_plans:
-
-    .. table:: **Payment Plans**
-
-        +-------+--------------------------------------------------------------+
-        | Code  | Payment Plan                                                 |
-        +=======+==============================================================+
-        |   0   | One time payment                                             |
-        +-------+--------------------------------------------------------------+
-        |   1   | Many payments - interests will be charged from customer      |
-        +-------+--------------------------------------------------------------+
-        |   2   | Many payments - interests will be charged from establishment |
-        +-------+--------------------------------------------------------------+
-
-
-    .. _payment_methods:
-
-    .. table:: **Payment Methods**
-
-        +-----+---------------------------------------+
-        |Code |Payment Method                         |
-        +=====+=======================================+
-        | 123 |Cielo Visa Electron                    |
-        +-----+---------------------------------------+
-        | 500 |Cielo Visa                             |
-        +-----+---------------------------------------+
-        | 501 |Cielo MasterCard                       |
-        +-----+---------------------------------------+
-        | 502 |Cielo Amex                             |
-        +-----+---------------------------------------+
-        | 503 |Cielo Diners                           |
-        +-----+---------------------------------------+
-        | 504 |Cielo Elo                              |
-        +-----+---------------------------------------+
-        | 505 |Banorte Visa                           |
-        +-----+---------------------------------------+
-        | 506 |Banorte MasterCard                     |
-        +-----+---------------------------------------+
-        | 507 |Banorte Diners                         |
-        +-----+---------------------------------------+
-        | 508 |Banorte Amex                           |
-        +-----+---------------------------------------+
-        | 509 |Redecard Visa                          |
-        +-----+---------------------------------------+
-        | 510 |Redecard MasterCard                    |
-        +-----+---------------------------------------+
-        | 511 |Redecard Diners                        |
-        +-----+---------------------------------------+
-        | 512 |PagosOnLine Visa                       |
-        +-----+---------------------------------------+
-        | 513 |PagosOnLine MasterCard                 |
-        +-----+---------------------------------------+
-        | 514 |PagosOnLine Amex                       |
-        +-----+---------------------------------------+
-        | 515 |PagosOnLine Diners                     |
-        +-----+---------------------------------------+
-        | 516 |Payvision Visa                         |
-        +-----+---------------------------------------+
-        | 517 |Payvision MasterCard                   |
-        +-----+---------------------------------------+
-        | 518 |Payvision Diners                       |
-        +-----+---------------------------------------+
-        | 519 |Payvision Amex                         |
-        +-----+---------------------------------------+
-        | 520 |Banorte Cargos Automaticos Visa        |
-        +-----+---------------------------------------+
-        | 521 |Banorte Cargos Automaticos MasterCard  |
-        +-----+---------------------------------------+
-        | 522 |Banorte Cargos Automaticos Diners      |
-        +-----+---------------------------------------+
-        | 523 |Amex 2P                                |
-        +-----+---------------------------------------+
-        | 524 |SITEF Visa                             |
-        +-----+---------------------------------------+
-        | 525 |SITEF MasterCard                       |
-        +-----+---------------------------------------+
-        | 526 |SITEF Amex                             |
-        +-----+---------------------------------------+
-        | 527 |SITEF Diners                           |
-        +-----+---------------------------------------+
-        | 528 |SITEF HiperCard                        |
-        +-----+---------------------------------------+
-        | 529 |SITEF Leader                           |
-        +-----+---------------------------------------+
-        | 530 |SITEF Aura                             |
-        +-----+---------------------------------------+
-        | 531 |SITEF Santander Visa                   |
-        +-----+---------------------------------------+
-        | 532 |SITEF Santander MasterCard             |
-        +-----+---------------------------------------+
-        | 995 |Simulated USD                          |
-        +-----+---------------------------------------+
-        | 996 |Simulated EUR                          |
-        +-----+---------------------------------------+
-        | 997 |Simulated BRL                          |
-        +-----+---------------------------------------+
-
     """
 
     _PAYMENT_METHODS = {
@@ -259,6 +141,8 @@ and/or returned by responses.
 :arg payment_method: Integer representing one of the
                      available :ref:`payment_methods`.
 
+:returns: :class:`~braspag.BraspagResponse`
+
         """
 
         assert any((kwargs.get('card_number'),
@@ -325,28 +209,32 @@ and/or returned by responses.
     def void(self, transaction_id, amount=0):
         """Void the given amount for the given transaction_id.
 
-        This method should be used to return funds to customers
-        for transactions that happened within less than 23h and
-        59 minutes ago. For other transactions use 
-        :meth:`~braspag.BraspagRequest.refund`.
+This method should be used to return funds to customers
+for transactions that happened within less than 23h and
+59 minutes ago. For other transactions use
+:meth:`~braspag.BraspagRequest.refund`.
 
-        If the amount is 0 (zero) the full transaction will be
-        voided.
-        
+If the amount is 0 (zero) the full transaction will be
+voided.
+
+:returns: :class:`~braspag.BraspagResponse`
+
         """
         return self._base_transaction(transaction_id, amount, 'Void')
 
     def refund(self, transaction_id, amount=0):
         """Refund the given amount for the given transaction_id.
 
-        This method should be used to return funds to customers
-        for transactions that happened at least 24 hours ago.
-        For transactions that happended within 24 hours use 
-        :meth:`~braspag.BraspagRequest.void`.
+This method should be used to return funds to customers
+for transactions that happened at least 24 hours ago.
+For transactions that happended within 24 hours use
+:meth:`~braspag.BraspagRequest.void`.
 
-        If the amount is 0 (zero) the full transaction will be
-        refunded.
-        
+If the amount is 0 (zero) the full transaction will be
+refunded.
+
+:returns: :class:`~braspag.BraspagResponse`
+
         """
         return self._base_transaction(transaction_id, amount, 'Refund')
 

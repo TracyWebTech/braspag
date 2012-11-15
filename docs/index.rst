@@ -9,10 +9,10 @@ Welcome to Python Braspag Lib's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   braspag
-   payment_methods
+    braspag
+    constants
 
 
 Indices and tables
