@@ -1,26 +1,38 @@
 # -*- encoding: utf-8 -*-
 
+import sys
 import uuid
 import logging
 
 from pprint import pformat
 from braspag.core import BraspagRequest
 
-MERCHANT_ID = u'12345678-1234-1234-1234-1234567890AB'
+if len(sys.argv) > 1:
+    MERCHANT_ID = sys.argv[1]
+else:
+    MERCHANT_ID = u'12345678-1234-1234-1234-1234567890AB'
 
-logging.root.setLevel(logging.DEBUG)
+logging.root.setLevel(logging.INFO)
 
+# Create request object
 request = BraspagRequest(merchant_id=MERCHANT_ID, homologation=True)
 
+# Authorize
 response = request.authorize(
     order_id=uuid.uuid4(),
     customer_id=u'12345678900',
     customer_name=u'José da Silva',
     customer_email='jose123@dasilva.com.br',
-    payment_method=BraspagRequest._PAYMENT_METHODS['Simulated']['BRL'],
+    payment_method=997, # Simulated BRL
     amount=10000,
-    card_token=u'0202448c-3b90-4395-b562-b98be24687f9',
+    transaction_type=1,
+    card_holder=u'Jose da Silva',
+    card_number=u'0000000000000001',
+    card_security_code='123',
+    card_exp_date='05/2018',
 )
+logging.info(pformat(response.__dict__))
 
-logging.debug(pformat(response.__dict__))
-
+# Capture
+response2 = request.capture(transaction_id=response.transaction_id)
+logging.info(pformat(response2.__dict__))
