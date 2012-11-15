@@ -280,6 +280,19 @@ class BraspagResponse(object):
             raise BraspagHttpResponseException(http_reponse.status,
                                                http_reponse.reason)
 
+        # Ensure all attributes are set before returning
+        self.order_id = None
+        self.braspag_order_id = None
+        self.transaction_id = None
+        self.payment_method = None
+        self.amount = None
+        self.acquirer_transaction_id = None
+        self.authorization_code = None
+        self.return_code = None
+        self.return_message = None
+        self.card_token = None
+        self.status = None
+
         xml_response = http_reponse.read()
         self.root = ElementTree.fromstring(xml_response)
 
