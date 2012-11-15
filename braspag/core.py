@@ -323,9 +323,31 @@ and/or returned by responses.
         return self._request(xml_request)
 
     def void(self, transaction_id, amount=0):
+        """Void the given amount for the given transaction_id.
+
+        This method should be used to return funds to customers
+        for transactions that happened within less than 23h and
+        59 minutes ago. For other transactions use 
+        :meth:`~braspag.BraspagRequest.refund`.
+
+        If the amount is 0 (zero) the full transaction will be
+        voided.
+        
+        """
         return self._base_transaction(transaction_id, amount, 'Void')
 
     def refund(self, transaction_id, amount=0):
+        """Refund the given amount for the given transaction_id.
+
+        This method should be used to return funds to customers
+        for transactions that happened at least 24 hours ago.
+        For transactions that happended within 24 hours use 
+        :meth:`~braspag.BraspagRequest.void`.
+
+        If the amount is 0 (zero) the full transaction will be
+        refunded.
+        
+        """
         return self._base_transaction(transaction_id, amount, 'Refund')
 
     def capture(self, transaction_id, amount=0):
