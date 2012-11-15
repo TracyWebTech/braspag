@@ -241,9 +241,11 @@ refunded.
     def capture(self, transaction_id, amount=0):
         """Capture the given `amount` from the given transaction_id.
 
-        This method should only be called after pre-authorizing the
-        transaction by calling :meth:`~braspag.BraspagRequest.authorize`
-        with `transaction_types` 1 or 3.
+This method should only be called after pre-authorizing the
+transaction by calling :meth:`~braspag.BraspagRequest.authorize`
+with `transaction_types` 1 or 3.
+
+:returns: :class:`~braspag.BraspagResponse`
 
         """
         return self._base_transaction(transaction_id, amount, 'Capture')
