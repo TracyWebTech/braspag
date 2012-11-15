@@ -14,6 +14,15 @@ Contents:
     braspag
     constants
 
+Get the source
+===============
+
+Source: https://github.com/TracyWebTech/braspag
+
+Travis: |build-status|
+
+.. |BUILD-STATUS| image:: https://secure.travis-ci.org/TracyWebTech/braspag.png?branch=master 
+    :target: https://travis-ci.org/TracyWebTech/braspag
 
 Indices and tables
 ==================
