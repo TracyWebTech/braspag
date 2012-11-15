@@ -317,7 +317,7 @@ handled:
             data_dict['merchant_id'] = self.merchant_id
 
         if not data_dict.has_key('request_id'):
-            data_dict['request_id'] = unicode(uuid.uuid1())
+            data_dict['request_id'] = unicode(uuid.uuid4())
 
         template = self.jinja_env.get_template(template_name)
         xml_request = template.render(data_dict)
