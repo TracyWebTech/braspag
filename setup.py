@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 from setuptools import setup
 from braspag.version import __version__
 
-readme = open('README.md').read()
+
+cwd = os.path.abspath(os.path.dirname(__file__))
+readme = open(os.path.join(cwd, 'README.md')).read()
+
 
 setup(
     name='braspag',
@@ -21,4 +25,5 @@ setup(
     test_suite='tests.suite',
     install_requires=['Jinja2'],
     tests_require=['Mock'],
+    zip_safe=False,
 )
