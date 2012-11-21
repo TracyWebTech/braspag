@@ -190,7 +190,7 @@ Boleto generation is not yet implemented.
         if kwargs.get('save_card', False):
             kwargs['save_card'] = 'true'
 
-        xml_request = self._render_template('authorize.xml', kwargs)
+        xml_request = self._render_template('authorize_creditcard.xml', kwargs)
 
         return self._request(xml_request)
 
@@ -373,4 +373,5 @@ class BraspagResponse(object):
 
         return errors
 
-
+    def issue_invoice(self):
+        pass

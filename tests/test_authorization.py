@@ -41,7 +41,8 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
         self.request._render_template = MagicMock(name='_render_template')
         response = self.request.authorize(**self.data_dict)
 
-        self.request._render_template.assert_called_once_with('authorize.xml',
+        self.request._render_template.assert_called_once_with(
+            'authorize_creditcard.xml',
             dict(self.data_dict.items() + [
                 ('currency', 'BRL'),
                 ('payment_plan', 0),

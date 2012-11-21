@@ -1,0 +1,14 @@
+{% extends 'authorize.xml' %}
+{% block payment_data %}
+  {% boleto_number %}
+    <BoletoNumber>{{ boleto_number }}</BoletoNumber>
+  {% endif %}
+
+  {% boleto_instructions %}
+    <BoletoInstructions>{{ boleto_instructions }}</BoletoInstructions>
+  {% endif %}
+
+  {% boleto_expiration_date %}
+    <BoletoExpirationDate>{{ boleto_expiration_date }}</BoletoExpirationDate>
+  {% endif %}
+{% endblock %}

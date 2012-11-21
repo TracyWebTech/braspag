@@ -5,8 +5,7 @@
 
         <RequestId>{{ request_id }}</RequestId>
         <Version>1.0</Version>
-        
-        {% block request %}
+
         <OrderData>
           <MerchantId>{{ merchant_id }}</MerchantId>
           <OrderId>{{ order_id }}</OrderId>
@@ -54,33 +53,23 @@
         </CustomerData>
 
         <PaymentDataCollection>
+        {% if payment_method %}
           <PaymentDataRequest xsi:type="CreditCardDataRequest">
-            <PaymentMethod>{{ payment_method }}</PaymentMethod>
+              <PaymentMethod>{{ payment_method }}</PaymentMethod>
+        {% else %}
+          <PaymentDataRequest xsi:type="BoletoDataRequest">
+              <PaymentMethod xsi:nil="true" />
+        {% endif %}
+
             <Amount>{{ amount }}</Amount>
             <Currency>{{ currency }}</Currency>
             <Country>{{ country }}</Country>
-            <NumberOfPayments>{{ number_of_payments }}</NumberOfPayments>
-            <PaymentPlan>{{ payment_plan }}</PaymentPlan>
-            <TransactionType>{{ transaction_type }}</TransactionType>
 
-            {% if card_number %}
-              <CardHolder>{{ card_holder }}</CardHolder>
-              <CardNumber>{{ card_number }}</CardNumber>
-              <CardSecurityCode>{{ card_security_code }}</CardSecurityCode>
-              <CardExpirationDate>{{ card_exp_date }}</CardExpirationDate>
-              {% if save_card %}
-                 <SaveCreditCard>{{ save_card }}</SaveCreditCard>
-              {% endif %}
-            {% endif %}
-
-            {% if card_token %}
-               <CreditCardToken>{{ card_token }}</CreditCardToken>
-            {% endif %}
+            {% block payment_data %}{% endblock %}
 
             <AdditionalDataCollection xsi:nil="true" />
           </PaymentDataRequest>
         </PaymentDataCollection>
-        {% endblock %}
       </request>
     </AuthorizeTransaction>
 {% endblock %}
