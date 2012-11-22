@@ -36,3 +36,7 @@ logging.info(pformat(response.__dict__))
 # Capture
 response2 = request.capture(transaction_id=response.transaction_id)
 logging.info(pformat(response2.__dict__))
+
+# Void
+response3 = request.void(transaction_id=response.transaction_id)
+logging.info(pformat(response3.__dict__))
