@@ -60,12 +60,12 @@ class BraspagRequestAuthorizeTest(unittest.TestCase):
             ])
         )
 
-    def test_render_boleto_template(self):
+    def test_render_billet_template(self):
         self.request._render_template = MagicMock(name='_render_template')
-        response = self.request.issue_invoice(**self.boleto_dict)
+        response = self.request.issue_billet(**self.boleto_dict)
 
         self.request._render_template.assert_called_once_with(
-            'authorize_boleto.xml',
+            'authorize_billet.xml',
             dict(self.boleto_dict.items() + [
                 ('currency', 'BRL'),
                 ('country', 'BRA'),

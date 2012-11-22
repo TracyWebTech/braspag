@@ -17,7 +17,7 @@ from decimal import Decimal, InvalidOperation
 class BraspagRequest(object):
     """Implements Braspag Pagador API (manual version 1.9).
 
-Boleto generation is not yet implemented.
+Billet generation is not yet implemented.
 
     """
 
@@ -262,7 +262,7 @@ with `transaction_types` 1 or 3.
         logging.debug(xml_request)
         return xml_request
 
-    def issue_invoice(self, **kwargs):
+    def issue_billet(self, **kwargs):
         """All arguments supplied to this method must be keyword arguments.
 
 :arg order_id: Order id. It will be used to indentify the
@@ -286,7 +286,7 @@ with `transaction_types` 1 or 3.
         context = kwargs.copy()
         context.update({'payment_method': 14})
 
-        xml_request = self._render_template('authorize_boleto.xml', context)
+        xml_request = self._render_template('authorize_billet.xml', context)
 
         return self._request(xml_request)
 
