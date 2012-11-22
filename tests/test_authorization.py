@@ -7,6 +7,7 @@ import codecs
 import unittest
 from braspag import BraspagRequest
 from braspag.utils import spaceless
+from braspag.consts import PAYMENT_METHODS
 
 from mock import MagicMock, Mock
 
@@ -17,7 +18,7 @@ AUTHORIZATION_DATA = 'tests/data/authorization_request.xml'
 class BraspagRequestAuthorizeTest(unittest.TestCase):
 
     def setUp(self):
-        payment_method = BraspagRequest._PAYMENT_METHODS['Simulated']['BRL']
+        payment_method = PAYMENT_METHODS['Simulated']['BRL']
         merchant_id = '12345678-1234-1234-1234-1234567890AB'
         data_dict = {
             'request_id': '782a56e2-2dae-11e2-b3ee-080027d29772',
