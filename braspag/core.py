@@ -262,6 +262,34 @@ with `transaction_types` 1 or 3.
         logging.debug(xml_request)
         return xml_request
 
+    def issue_invoice(self, **kwargs):
+        """All arguments supplied to this method must be keyword arguments.
+
+:arg order_id: Order id. It will be used to indentify the
+               order later in Braspag.
+:arg customer_id: Must be user's CPF/CNPJ.
+:arg customer_name: User's full name.
+:arg customer_email: User's email address.
+:arg amount: Amount to charge.
+:arg currency: Currency of the given amount. *Default: BRL*.
+:arg country: User's country. *Default: BRA*.
+
+:returns: :class:`~braspag.BraspagResponse`
+
+"""
+        if not kwargs.get('currency'):
+            kwargs['currency'] = 'BRL'
+
+        if not kwargs.get('country'):
+            kwargs['country'] = 'BRA'
+
+        context = kwargs.copy()
+        context.update({'payment_method': 14})
+
+        xml_request = self._render_template('authorize_boleto.xml', context)
+
+        return self._request(xml_request)
+
 
 class BraspagResponse(object):
     """ TODO:
@@ -372,6 +400,3 @@ class BraspagResponse(object):
             errors.append((int(code), msg))
 
         return errors
-
-    def issue_invoice(self):
-        pass

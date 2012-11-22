@@ -53,14 +53,13 @@
         </CustomerData>
 
         <PaymentDataCollection>
-        {% if payment_method %}
-          <PaymentDataRequest xsi:type="CreditCardDataRequest">
-              <PaymentMethod>{{ payment_method }}</PaymentMethod>
-        {% else %}
+        {% if payment_method == 14 %}
           <PaymentDataRequest xsi:type="BoletoDataRequest">
-              <PaymentMethod xsi:nil="true" />
+        {% else %}
+          <PaymentDataRequest xsi:type="CreditCardDataRequest">
         {% endif %}
 
+            <PaymentMethod>{{ payment_method }}</PaymentMethod>
             <Amount>{{ amount }}</Amount>
             <Currency>{{ currency }}</Currency>
             <Country>{{ country }}</Country>
