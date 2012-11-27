@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <CaptureCreditCardTransactionResponse xmlns="https://www.pagador.com.br/webservice/pagador">
+      <CaptureCreditCardTransactionResult>
+        <CorrelationId>
+          7eb38395-c17e-4b85-8204-8065563c548f
+        </CorrelationId>
+        <Success>
+          true
+        </Success>
+        <ErrorReportDataCollection/>
+        <TransactionDataCollection>
+          <TransactionDataResponse>
+            <BraspagTransactionId>
+              0dfc078c-4c8b-454a-af0f-1f02023a4141
+            </BraspagTransactionId>
+            <AcquirerTransactionId>
+              1127023808906
+            </AcquirerTransactionId>
+            <Amount>
+              10000
+            </Amount>
+            <AuthorizationCode>
+              20121127023809171
+            </AuthorizationCode>
+            <ReturnCode>
+              6
+            </ReturnCode>
+            <ReturnMessage>
+              Operation Successful
+            </ReturnMessage>
+            <Status>
+              0
+            </Status>
+          </TransactionDataResponse>
+        </TransactionDataCollection>
+      </CaptureCreditCardTransactionResult>
+    </CaptureCreditCardTransactionResponse>
+  </soap:Body>
+</soap:Envelope>

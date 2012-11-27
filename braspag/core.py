@@ -10,6 +10,7 @@ import jinja2
 
 from .utils import spaceless, is_valid_guid
 from .exceptions import BraspagHttpResponseException
+from .response import CreditCardAuthorizationResponse
 from xml.dom import minidom
 from xml.etree import ElementTree
 from decimal import Decimal, InvalidOperation
@@ -35,23 +36,18 @@ Billet generation is not yet implemented.
             loader=jinja2.PackageLoader('braspag'),
         )
 
-    @staticmethod
-    def _webservice_request(xml, url):
+    def _request(self, xml):
         WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
 
         if isinstance(xml, unicode):
             xml = xml.encode('utf-8')
 
-        http = httplib.HTTPSConnection(url)
+        http = httplib.HTTPSConnection(self.url)
         http.request("POST", WSDL, body=xml, headers = {
             "Host": "localhost",
             "Content-Type": "text/xml; charset=UTF-8",
         })
-        return BraspagResponse(http.getresponse())
-
-    def _request(self, xml_request):
-        return BraspagRequest._webservice_request(spaceless(xml_request),
-                                                 self.url)
+        return http.getresponse()
 
     def authorize(self, **kwargs):
         """All arguments supplied to this method must be keyword arguments.
@@ -134,8 +130,8 @@ Billet generation is not yet implemented.
             kwargs['save_card'] = 'true'
 
         xml_request = self._render_template('authorize_creditcard.xml', kwargs)
-
-        return self._request(xml_request)
+        return CreditCardAuthorizationResponse(
+                                        self._request(spaceless(xml_request)))
 
     def _base_transaction(self, transaction_id, amount, type=None):
         assert type in ('Refund', 'Void', 'Capture')

@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <AuthorizeTransactionResponse xmlns="https://www.pagador.com.br/webservice/pagador">
+      <AuthorizeTransactionResult>
+        <CorrelationId>
+          3c1e4731-fad5-445c-bd85-cf59be415e24
+        </CorrelationId>
+        <Success>
+          true
+        </Success>
+        <ErrorReportDataCollection/>
+        <OrderData>
+          <OrderId>
+            c449e66b-731b-4ae4-9ea6-9c37a208986a
+          </OrderId>
+          <BraspagOrderId>
+            999c496f-cc80-438c-bbbb-1548b6c478c9
+          </BraspagOrderId>
+        </OrderData>
+        <PaymentDataCollection>
+          <PaymentDataResponse xsi:type="BoletoDataResponse">
+            <BraspagTransactionId>
+              632bf9f2-007e-44b8-a581-3917a0f9a61c
+            </BraspagTransactionId>
+            <PaymentMethod>
+              10
+            </PaymentMethod>
+            <Amount>
+              10000
+            </Amount>
+            <BoletoNumber>
+              100000002
+            </BoletoNumber>
+            <BoletoExpirationDate>
+              11/27/2012 12:00:00 AM
+            </BoletoExpirationDate>
+            <BoletoUrl>
+              https://homologacao.pagador.com.br/pagador/reenvia.asp?Id_Transacao=632bf9f2-007e-44b8-a581-3917a0f9a61c
+            </BoletoUrl>
+            <BarCodeNumber>
+              35691.23403 00456.780006 01000.000024 9 55300000010000
+            </BarCodeNumber>
+            <Assignor>
+              SPRING PUBLICA&amp;#199;&amp;#195;O LTDA
+            </Assignor>
+            <Message>
+              Operation Successful
+            </Message>
+          </PaymentDataResponse>
+        </PaymentDataCollection>
+      </AuthorizeTransactionResult>
+    </AuthorizeTransactionResponse>
+  </soap:Body>
+</soap:Envelope>

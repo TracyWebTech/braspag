@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <AuthorizeTransactionResponse xmlns="https://www.pagador.com.br/webservice/pagador">
+      <AuthorizeTransactionResult>
+        <CorrelationId>
+          5b4515b3-eaa8-4d0c-983b-8e4aa0d4893f
+        </CorrelationId>
+        <Success>
+          true
+        </Success>
+        <ErrorReportDataCollection/>
+        <OrderData>
+          <OrderId>
+            2cf84e51-c45b-45d9-9f64-554a6e088668
+          </OrderId>
+          <BraspagOrderId>
+            893cd2c6-9a29-4009-bd5b-4cc8791ebb49
+          </BraspagOrderId>
+        </OrderData>
+        <PaymentDataCollection>
+          <PaymentDataResponse xsi:type="CreditCardDataResponse">
+            <BraspagTransactionId>
+              0dfc078c-4c8b-454a-af0f-1f02023a4141
+            </BraspagTransactionId>
+            <PaymentMethod>
+              997
+            </PaymentMethod>
+            <Amount>
+              10000
+            </Amount>
+            <AcquirerTransactionId>
+              1127023808906
+            </AcquirerTransactionId>
+            <AuthorizationCode>
+              20121127023808921
+            </AuthorizationCode>
+            <ReturnCode>
+              4
+            </ReturnCode>
+            <ReturnMessage>
+              Operation Successful
+            </ReturnMessage>
+            <Status>
+              1
+            </Status>
+            <CreditCardToken xsi:nil="true"/>
+          </PaymentDataResponse>
+        </PaymentDataCollection>
+      </AuthorizeTransactionResult>
+    </AuthorizeTransactionResponse>
+  </soap:Body>
+</soap:Envelope>
