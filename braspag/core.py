@@ -47,7 +47,9 @@ Billet generation is not yet implemented.
             "Host": "localhost",
             "Content-Type": "text/xml; charset=UTF-8",
         })
-        return http.getresponse()
+        response = http.getresponse()
+        logging.debug(minidom.parseString(response).toprettyxml(indent='  '))
+        return response
 
     def authorize(self, **kwargs):
         """All arguments supplied to this method must be keyword arguments.
@@ -130,8 +132,8 @@ Billet generation is not yet implemented.
             kwargs['save_card'] = 'true'
 
         xml_request = self._render_template('authorize_creditcard.xml', kwargs)
-        return CreditCardAuthorizationResponse(
-                                        self._request(spaceless(xml_request)))
+        response = self._request(spaceless(xml_request))
+        return CreditCardAuthorizationResponse(response)
 
     def _base_transaction(self, transaction_id, amount, type=None):
         assert type in ('Refund', 'Void', 'Capture')
