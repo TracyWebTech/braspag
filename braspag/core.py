@@ -48,8 +48,9 @@ Billet generation is not yet implemented.
             "Content-Type": "text/xml; charset=UTF-8",
         })
         response = http.getresponse()
-        logging.debug(minidom.parseString(response).toprettyxml(indent='  '))
-        return response
+        xmlresponse = response.read()
+        logging.debug(minidom.parseString(xmlresponse).toprettyxml(indent='  '))
+        return xmlresponse
 
     def authorize(self, **kwargs):
         """All arguments supplied to this method must be keyword arguments.
