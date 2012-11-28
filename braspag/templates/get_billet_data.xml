@@ -1,11 +1,11 @@
 {% extends 'base.xml' %}
 {% block body_content %}
 <GetBoletoData xmlns="https://www.pagador.com.br/query/pagadorquery">
-  <BoletoDataRequest>
+  <boletoDataRequest>
     <RequestId>{{ request_id }}</RequestId>
     <Version>1.0</Version>
     <MerchantId>{{ merchant_id }}</MerchantId>
     <BraspagTransactionId>{{ transaction_id }}</BraspagTransactionId>
-  </BoletoDataRequest>
+  </boletoDataRequest>
 </GetBoletoData>
 {% endblock %}
