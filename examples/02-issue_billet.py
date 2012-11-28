@@ -23,6 +23,7 @@ response = request.issue_billet(
     customer_name=u'José da Silva',
     customer_email='jose123@dasilva.com.br',
     amount=10000,
+    payment_method=10,
 )
 logging.info(pformat(response.__dict__))
 
