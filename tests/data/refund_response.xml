@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <RefundCreditCardTransactionResponse xmlns="https://www.pagador.com.br/webservice/pagador">
+      <RefundCreditCardTransactionResult>
+        <CorrelationId>
+          87fcfcbe-1272-4a78-89d4-4d3b33ab74e0
+        </CorrelationId>
+        <Success>
+          true
+        </Success>
+        <ErrorReportDataCollection/>
+        <TransactionDataCollection>
+          <TransactionDataResponse>
+            <BraspagTransactionId>
+              0dfc078c-4c8b-454a-af0f-1f02023a4141
+            </BraspagTransactionId>
+            <AcquirerTransactionId>
+              2cf84e51-c45b-45d9-9f64-554a6e088668
+            </AcquirerTransactionId>
+            <Amount>
+              123496
+            </Amount>
+            <AuthorizationCode>
+              20121127023809171
+            </AuthorizationCode>
+            <ReturnCode>
+              0
+            </ReturnCode>
+            <ReturnMessage>
+              Operation Successful
+            </ReturnMessage>
+            <Status>
+              0
+            </Status>
+          </TransactionDataResponse>
+        </TransactionDataCollection>
+      </RefundCreditCardTransactionResult>
+    </RefundCreditCardTransactionResponse>
+  </soap:Body>
+</soap:Envelope>
