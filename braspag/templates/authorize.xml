@@ -53,7 +53,7 @@
         </CustomerData>
 
         <PaymentDataCollection>
-        {% if payment_method == 14 %}
+        {% if is_billet %}
           <PaymentDataRequest xsi:type="BoletoDataRequest">
         {% else %}
           <PaymentDataRequest xsi:type="CreditCardDataRequest">

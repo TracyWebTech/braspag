@@ -222,6 +222,7 @@ with `transaction_types` 1 or 3.
 :arg amount: Amount to charge.
 :arg currency: Currency of the given amount. *Default: BRL*.
 :arg country: User's country. *Default: BRA*.
+:arg payment_method: Payment method code
 
 :returns: :class:`~braspag.BraspagResponse`
 
@@ -232,9 +233,7 @@ with `transaction_types` 1 or 3.
         if not kwargs.get('country'):
             kwargs['country'] = 'BRA'
 
-        context = kwargs.copy()
-        context.update({'payment_method': 14})
+        kwargs['is_billet'] = True
 
-        xml_request = self._render_template('authorize_billet.xml', context)
-
-        return BilletResponse(self._request(xml_request))
+        xml_request = self._render_template('authorize_billet.xml', kwargs)
+        return BilletResponse(self._request(spaceless(xml_request)))

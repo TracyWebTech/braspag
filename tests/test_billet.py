@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import uuid
+import codecs
 
 from decimal import Decimal
 from datetime import datetime
 
-from base import BraspagTestCase
+from mock import MagicMock
+from base import BraspagTestCase, RegexpMatcher
+
+from braspag.utils import spaceless
 
 
 class BilletTest(BraspagTestCase):
@@ -19,12 +22,32 @@ class BilletTest(BraspagTestCase):
             'customer_name': u'Jose da Silva',
             'customer_email': 'jose123@dasilva.com.br',
             'amount': 10000,
+            'payment_method': 10,
         }
 
         with open('tests/data/billet_auth_response.xml') as response:
             self.braspag._request.return_value = response.read()
 
         self.response = self.braspag.issue_billet(**self.data_dict)
+
+    def test_render_template(self):
+        self.braspag._render_template = MagicMock(name='_render_template')
+        response = self.braspag.issue_billet(**self.data_dict)
+
+        self.braspag._render_template.assert_called_with('authorize_billet.xml',
+            dict(self.data_dict.items() + [
+                ('country', 'BRA'),
+                ('currency', 'BRL'),
+                ('is_billet', True),
+            ])
+        )
+
+    def test_request(self):
+        billet_request = 'tests/data/billet_request.xml'
+
+        response = self.braspag.issue_billet(**self.data_dict)
+        matcher = RegexpMatcher(billet_request)
+        self.braspag._request.assert_called_with(matcher)
 
     def test_correlation_id(self):
         assert self.response.correlation_id == u'3c1e4731-fad5-445c-bd85-cf59be415e24'
