@@ -3,6 +3,7 @@
 import uuid
 
 from decimal import Decimal
+from datetime import datetime
 
 from base import BraspagTestCase
 
@@ -47,8 +48,7 @@ class BilletTest(BraspagTestCase):
         assert self.response.number == 100000002
 
     def test_expiration_date(self):
-        assert 1 == 2 # TODO
-        #assert self.response.expiration_date == '11/27/2012 12:00:00 AM'
+        assert self.response.expiration_date == datetime(2012, 11, 27, 12, 0)
 
     def test_url(self):
         assert self.response.url == 'https://homologacao.pagador.com.br/pagador/reenvia.asp?Id_Transacao=632bf9f2-007e-44b8-a581-3917a0f9a61c'

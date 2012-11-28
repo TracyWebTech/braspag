@@ -2,9 +2,9 @@
 import xml.parsers.expat
 import xml.etree.ElementTree as ET
 
-from xml.etree.ElementTree import Element
-
 from decimal import Decimal
+from datetime import datetime
+from xml.etree.ElementTree import Element
 
 
 def unescape(s):
@@ -54,6 +54,10 @@ def to_unicode(value):
         value = value.decode('utf-8')
 
     return unescape(value)
+
+
+def to_date(value):
+    return datetime.strptime(value, '%m/%d/%Y %H:%M:%S %p')
 
 
 class PagadorResponse(object):
@@ -146,7 +150,7 @@ class BilletResponse(PagadorResponse):
         self._fields['payment_method'] = ('PaymentMethod', int)
 
         self._fields['number'] = ('BoletoNumber', int)
-        self._fields['expiration_date'] = 'BoletoExpirationDate'
+        self._fields['expiration_date'] = ('BoletoExpirationDate', to_date)
         self._fields['url'] = 'BoletoUrl'
         self._fields['assignor'] = 'Assignor'
         self._fields['barcode'] = 'BarCodeNumber'
