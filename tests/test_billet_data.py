@@ -55,7 +55,6 @@ class IssueBilletTest(BraspagTestCase):
         assert self.response.document_number == u'0f7e5e31-c5ac-4a48-b985-47efb83007fd'
 
     def test_amount(self):
-        print self.response.amount
         assert self.response.amount == Decimal('100.00')
 
     def test_number(self):
