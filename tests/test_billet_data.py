@@ -30,19 +30,14 @@ class IssueBilletTest(BraspagTestCase):
         response = self.braspag.get_billet_data(**self.data_dict)
 
         self.braspag._render_template.assert_called_with('get_billet_data.xml',
-            dict(self.data_dict.items() + [
-                ('country', 'BRA'),
-                ('currency', 'BRL'),
-                ('is_billet', True),
-            ])
-        )
+                                                         self.data_dict)
 
     def test_request(self):
-        billet_request = 'tests/data/billet_request.xml'
+        billet_request = 'tests/data/get_billet_data_request.xml'
 
-        response = self.braspag.issue_billet(**self.data_dict)
+        response = self.braspag.get_billet_data(**self.data_dict)
         matcher = RegexpMatcher(billet_request)
-        self.braspag._request.assert_called_with(matcher)
+        self.braspag._request.assert_called_with(matcher, query=True)
 
     def test_correlation_id(self):
         assert self.response.correlation_id == u'4cd0ad15-0017-4ec2-80cd-c09ecc26c4a1'
