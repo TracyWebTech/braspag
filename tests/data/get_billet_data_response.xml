@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <GetBoletoDataResponse xmlns="https://www.pagador.com.br/query/pagadorquery">
+      <GetBoletoDataResult>
+        <CorrelationId>
+          4cd0ad15-0017-4ec2-80cd-c09ecc26c4a1
+        </CorrelationId>
+        <Success>
+          true
+        </Success>
+        <ErrorReportDataCollection/>
+        <BraspagTransactionId>
+          140c74cf-099a-4cd4-9545-feb0260cecc1
+        </BraspagTransactionId>
+        <PaymentMethod>
+          10
+        </PaymentMethod>
+        <DocumentNumber>
+          0f7e5e31-c5ac-4a48-b985-47efb83007fd
+        </DocumentNumber>
+        <DocumentDate>
+          11/28/2012 12:00:00 AM
+        </DocumentDate>
+        <CustomerName>
+          José da Silva
+        </CustomerName>
+        <BoletoNumber>
+          1000000135
+        </BoletoNumber>
+        <BarCodeNumber>
+          35691.23403 00456.750009 01000.000131 9 55310000010000
+        </BarCodeNumber>
+        <BoletoExpirationDate>
+          11/28/2012 12:00:00 AM
+        </BoletoExpirationDate>
+        <BoletoType>
+          CSR
+        </BoletoType>
+        <BoletoUrl>
+          https://homologacao.pagador.com.br/pagador/reenvia.asp?Id_Transacao=140c74cf-099a-4cd4-9545-feb0260cecc1
+        </BoletoUrl>
+        <Amount>
+          10000
+        </Amount>
+        <PaidAmount>
+          0
+        </PaidAmount>
+        <BankNumber>
+          356-5
+        </BankNumber>
+        <Agency>
+          1234
+        </Agency>
+        <Account>
+          0004567
+        </Account>
+        <Assignor>
+          SPRING PUBLICA&amp;#199;&amp;#195;O LTDA
+        </Assignor>
+      </GetBoletoDataResult>
+    </GetBoletoDataResponse>
+  </soap:Body>
+</soap:Envelope>

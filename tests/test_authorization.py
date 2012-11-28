@@ -23,7 +23,7 @@ class AuthorizeTest(BraspagTestCase):
         super(AuthorizeTest, self).setUp()
         self.data_dict = {
             'request_id': '782a56e2-2dae-11e2-b3ee-080027d29772',
-            'order_id': '782b632a-2dae-11e2-b3ee-080027d29772',
+            'order_id': '2cf84e51-c45b-45d9-9f64-554a6e088668',
             'customer_id': '12345678900',
             'customer_name': u'José da Silva',
             'customer_email': 'jose123@dasilva.com.br',
@@ -73,7 +73,7 @@ class AuthorizeTest(BraspagTestCase):
         assert self.response.braspag_order_id == u'893cd2c6-9a29-4009-bd5b-4cc8791ebb49'
 
     def test_order_id(self):
-        assert self.response.order_id == u'893cd2c6-9a29-4009-bd5b-4cc8791ebb49'
+        assert self.response.order_id == u'2cf84e51-c45b-45d9-9f64-554a6e088668'
 
     def test_correlation_id(self):
         assert self.response.correlation_id == u'5b4515b3-eaa8-4d0c-983b-8e4aa0d4893f'

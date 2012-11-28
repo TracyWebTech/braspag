@@ -90,7 +90,7 @@ class PagadorResponse(object):
                         tag = tag_info
                         convert = to_unicode
 
-                    if elem.tag.endswith(tag):
+                    if elem.tag.endswith('}' + tag):
                         value = convert(elem.text.strip())
                         setattr(self, field, value)
 
