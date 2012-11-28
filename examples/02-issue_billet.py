@@ -17,6 +17,7 @@ logging.root.setLevel(logging.INFO)
 # Create request object
 request = BraspagRequest(merchant_id=MERCHANT_ID, homologation=True)
 
+# Issue billet
 response = request.issue_billet(
     order_id=uuid.uuid4(),
     customer_id=u'12345678900',
@@ -27,3 +28,6 @@ response = request.issue_billet(
 )
 logging.info(pformat(response.__dict__))
 
+# Get billet data
+response2 = request.get_billet_data(response.transaction_id)
+logging.info(pformat(response2.__dict__))

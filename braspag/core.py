@@ -37,8 +37,11 @@ Billet generation is not yet implemented.
             loader=jinja2.PackageLoader('braspag'),
         )
 
-    def _request(self, xml):
-        WSDL = '/webservice/pagadorTransaction.asmx?WSDL'
+    def _request(self, xml, query=False):
+        if query:
+            uri = '/services/pagadorQuery.asmx'
+        else:
+            uri = '/webservice/pagadorTransaction.asmx'
 
         if isinstance(xml, unicode):
             xml = xml.encode('utf-8')
@@ -68,7 +71,7 @@ Billet generation is not yet implemented.
 :arg card_security_code: Card security code.
 :arg card_exp_date: Card expiration date.
 :arg save_card: Flag that tell to Braspag to store card number.
-                If set to True Reponse will return a card token.
+                If set to True Response will return a card token.
                 *Default: False*.
 :arg card_token: Card token returned by Braspag. When used it
                  should replace *card_holder*, *card_exp_date*,
@@ -237,3 +240,20 @@ with `transaction_types` 1 or 3.
 
         xml_request = self._render_template('authorize_billet.xml', kwargs)
         return BilletResponse(self._request(spaceless(xml_request)))
+
+    def get_billet_data(self, request_id, transaction_id):
+        """All arguments supplied to this method must be keyword arguments.
+
+:arg request_id: The id of a request generated previously by *issue_billet*
+:arg transaction_id: The id of the transaction generated previously by
+*issue_billet*
+
+:returns: :class:`~braspag.BilletResponse`
+
+"""
+        assert is_valid_guid(transaction_id), 'Invalid Transaction ID'
+
+        context = {'transaction_id': transaction_id}
+        xml_request = self._render_template('get_billet_data.xml', context)
+        xml_response = self._request(xml_request, billet=True)
+        return BilletResponse(xml_response)

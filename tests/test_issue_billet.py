@@ -11,10 +11,10 @@ from base import BraspagTestCase, RegexpMatcher
 from braspag.utils import spaceless
 
 
-class BilletTest(BraspagTestCase):
+class IssueBilletTest(BraspagTestCase):
 
     def setUp(self):
-        super(BilletTest, self).setUp()
+        super(IssueBilletTest, self).setUp()
 
         self.data_dict = {
             'order_id': u'c449e66b-731b-4ae4-9ea6-9c37a208986a',
