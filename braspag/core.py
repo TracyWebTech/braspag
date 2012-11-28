@@ -241,10 +241,9 @@ with `transaction_types` 1 or 3.
         xml_request = self._render_template('authorize_billet.xml', kwargs)
         return BilletResponse(self._request(spaceless(xml_request)))
 
-    def get_billet_data(self, request_id, transaction_id):
+    def get_billet_data(self, transaction_id):
         """All arguments supplied to this method must be keyword arguments.
 
-:arg request_id: The id of a request generated previously by *issue_billet*
 :arg transaction_id: The id of the transaction generated previously by
 *issue_billet*
 
