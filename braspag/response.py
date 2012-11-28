@@ -12,8 +12,10 @@ def to_bool(value):
     elif value == 'false':
         return False
 
+
 def to_decimal(value):
     return Decimal(int(value)/100.0).quantize(Decimal('1.00'))
+
 
 def to_unicode(value):
     if isinstance(value, str):
@@ -78,7 +80,7 @@ class CreditCardResponse(PagadorResponse):
         #self.status_message = None
 
         super(CreditCardResponse, self).__init__(xml)
-        if self._STATUS and self.status:
+        if self._STATUS and hasattr(self, 'status'):
             self.status_message = dict(self._STATUS)[self.status]
 
 
@@ -89,6 +91,14 @@ class CreditCardAuthorizationResponse(CreditCardResponse):
         (2, 'Not Authorized'),
         (3, 'Disqualifying Error'),
         (4, 'Waiting for Answer'),
+    )
+
+
+class CreditCardCancelResponse(CreditCardResponse):
+    _STATUS = (
+        (0, 'Void/Refund Confirmed'),
+        (1, 'Void/Refund Denied'),
+        (2, 'Invalid Transaction'),
     )
 
 
@@ -110,4 +120,3 @@ class BilletResponse(PagadorResponse):
         self._fields['message'] = 'Message'
 
         super(BilletResponse, self).__init__(xml)
-

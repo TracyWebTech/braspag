@@ -10,7 +10,7 @@ import jinja2
 
 from .utils import spaceless, is_valid_guid
 from .exceptions import BraspagHttpResponseException
-from .response import CreditCardAuthorizationResponse
+from .response import CreditCardAuthorizationResponse, CreditCardCancelResponse
 from xml.dom import minidom
 from xml.etree import ElementTree
 from decimal import Decimal, InvalidOperation
@@ -146,7 +146,13 @@ Billet generation is not yet implemented.
             'transaction_id': transaction_id,
         }
         xml_request = self._render_template('base.xml', data_dict)
-        return self._request(xml_request)
+        xml_response = self._request(xml_request)
+
+        if type in ('Void', 'Refund'):
+            return CreditCardCancelResponse(xml_response)
+        else:
+            return CreditCardAuthorizationResponse(xml_response)
+
 
     def void(self, transaction_id, amount=0):
         """Void the given amount for the given transaction_id.
@@ -231,114 +237,3 @@ with `transaction_types` 1 or 3.
         xml_request = self._render_template('authorize_billet.xml', context)
 
         return self._request(xml_request)
-
-
-class BraspagResponse(object):
-    """ TODO:
-
-.. attribute:: correlation_id
-.. attribute:: errors
-.. attribute:: success
-.. attribute:: order_id
-.. attribute:: braspag_order_id
-.. attribute:: transaction_id
-.. attribute:: payment_method
-.. attribute:: amount
-.. attribute:: acquirer_transaction_id
-.. attribute:: authorization_code
-.. attribute:: return_code
-.. attribute:: return_message
-.. attribute:: card_token
-.. attribute:: status
-
-    """
-
-    _STATUS = [
-        (0, 'Captured'),
-        (1, 'Authorized'),
-        (2, 'Not Authorized'),
-        (3, 'Disqualifying Error'),
-        (4, 'Waiting for Answer'),
-    ]
-
-    _NAMESPACE = 'https://www.pagador.com.br/webservice/pagador'
-
-    def __init__(self, http_reponse):
-        if http_reponse.status != 200:
-            raise BraspagHttpResponseException(http_reponse.status,
-                                               http_reponse.reason)
-
-        # Ensure all attributes are set before returning
-        self.order_id = None
-        self.braspag_order_id = None
-        self.transaction_id = None
-        self.payment_method = None
-        self.amount = None
-        self.acquirer_transaction_id = None
-        self.authorization_code = None
-        self.return_code = None
-        self.return_message = None
-        self.card_token = None
-        self.status = None
-
-        xml_response = http_reponse.read()
-        self.root = ElementTree.fromstring(xml_response)
-
-        logging.debug(minidom.parseString(xml_response).\
-                                                    toprettyxml(indent='  '))
-
-        self.correlation_id = self._get_text('CorrelationId')
-        self.errors = self._get_errors()
-
-        if self._get_text('Success') == 'true':
-            self.success = True
-        else:
-            self.success = False
-            return
-
-        self.order_id = self._get_text('OrderId')
-        self.braspag_order_id = self._get_text('BraspagOrderId')
-        self.transaction_id = self._get_text('BraspagTransactionId')
-        self.payment_method = self._get_int('PaymentMethod')
-        self.amount = self._get_amount('Amount')
-        self.acquirer_transaction_id = self._get_text('AcquirerTransactionId')
-        self.authorization_code = self._get_text('AuthorizationCode')
-        self.return_code = self._get_int('ReturnCode')
-        self.return_message = self._get_text('ReturnMessage')
-        self.card_token = self._get_text('CreditCardToken')
-        self.status = BraspagResponse._STATUS[self._get_int('Status')]
-
-    def _get_text(self, field, node=None):
-        if node is None:
-            node = self.root
-        xml_tag = node.find('.//{{{0}}}{1}'.format(
-                                            BraspagResponse._NAMESPACE, field))
-        if xml_tag is not None:
-            if xml_tag.text is not None:
-                return xml_tag.text.strip()
-        return ''
-
-    def _get_int(self, field):
-        try:
-            return int(self._get_text(field))
-        except ValueError:
-            return 0
-
-    def _get_amount(self, field):
-        try:
-            amount = Decimal(self._get_text(field))
-        except InvalidOperation:
-            return Decimal('0.00')
-
-        return (amount/100).quantize(Decimal('1.00'))
-
-    def _get_errors(self):
-        errors = []
-        xml_errors = self.root.findall('.//{{{0}}}ErrorReportDataResponse'.\
-                                             format(BraspagResponse._NAMESPACE))
-        for error_node in xml_errors:
-            code = self._get_text('ErrorCode', error_node)
-            msg = self._get_text('ErrorMessage', error_node)
-            errors.append((int(code), msg))
-
-        return errors

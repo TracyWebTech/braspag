@@ -40,6 +40,26 @@ class AuthorizeTest(BraspagTestCase):
 
         self.response = self.braspag.authorize(**self.data_dict)
 
+    def test_render_cc_template(self):
+        self.braspag._render_template = MagicMock(name='_render_template')
+        response = self.braspag.authorize(**self.data_dict)
+
+        self.braspag._render_template.assert_called_once_with(
+            'authorize_creditcard.xml',
+            dict(self.data_dict.items() + [
+                ('currency', 'BRL'),
+                ('payment_plan', 0),
+                ('number_of_payments', 1),
+                ('country', 'BRA'),
+                ('transaction_type', 2),
+            ])
+        )
+
+    def test_webservice_request(self):
+        response = self.braspag.authorize(**self.data_dict)
+        with codecs.open(AUTHORIZATION_DATA, encoding='utf-8') as xml:
+            self.braspag._request.assert_called_with(spaceless(xml.read()))
+
     def test_amount(self):
         assert self.response.amount == Decimal('100.00')
 
@@ -55,14 +75,8 @@ class AuthorizeTest(BraspagTestCase):
     def test_order_id(self):
         assert self.response.order_id == u'893cd2c6-9a29-4009-bd5b-4cc8791ebb49'
 
-    def test_card_token(self):
-        pass
-
     def test_correlation_id(self):
         assert self.response.correlation_id == u'5b4515b3-eaa8-4d0c-983b-8e4aa0d4893f'
-
-    def test_errors(self):
-        pass
 
     def test_payment_method(self):
         assert self.response.payment_method == 997
@@ -85,22 +99,8 @@ class AuthorizeTest(BraspagTestCase):
     def test_transaction_id(self):
         assert self.response.transaction_id == u'0dfc078c-4c8b-454a-af0f-1f02023a4141'
 
-    def test_render_cc_template(self):
-        self.braspag._render_template = MagicMock(name='_render_template')
-        response = self.braspag.authorize(**self.data_dict)
+    def test_card_token(self):
+        pass #TODO
 
-        self.braspag._render_template.assert_called_once_with(
-            'authorize_creditcard.xml',
-            dict(self.data_dict.items() + [
-                ('currency', 'BRL'),
-                ('payment_plan', 0),
-                ('number_of_payments', 1),
-                ('country', 'BRA'),
-                ('transaction_type', 2),
-            ])
-        )
-
-    def test_webservice_request(self):
-        response = self.braspag.authorize(**self.data_dict)
-        with codecs.open(AUTHORIZATION_DATA, encoding='utf-8') as xml:
-            self.braspag._request.assert_called_with(spaceless(xml.read()))
+    def test_errors(self):
+        pass #TODO
