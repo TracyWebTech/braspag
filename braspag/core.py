@@ -10,8 +10,8 @@ import jinja2
 
 from .utils import spaceless, is_valid_guid
 from .exceptions import BraspagHttpResponseException
-from .response import CreditCardAuthorizationResponse, \
-                                       BilletResponse, CreditCardCancelResponse
+from .response import CreditCardAuthorizationResponse, BilletResponse, \
+                      BilletDataResponse, CreditCardCancelResponse
 from xml.dom import minidom
 from xml.etree import ElementTree
 from decimal import Decimal, InvalidOperation
