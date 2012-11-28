@@ -255,4 +255,4 @@ with `transaction_types` 1 or 3.
         context = {'transaction_id': transaction_id}
         xml_request = self._render_template('get_billet_data.xml', context)
         xml_response = self._request(xml_request, query=True)
-        return BilletResponse(xml_response)
+        return BilletDataResponse(xml_response)

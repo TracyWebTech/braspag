@@ -142,7 +142,7 @@ class CreditCardCancelResponse(CreditCardResponse):
 class BilletResponse(PagadorResponse):
 
     def __init__(self, xml):
-        self._fields = {}
+        self._fields = getattr(self, '_fields', {})
 
         # auth fields
         self._fields['order_id'] = 'OrderId'
@@ -157,3 +157,19 @@ class BilletResponse(PagadorResponse):
         self._fields['message'] = 'Message'
 
         super(BilletResponse, self).__init__(xml)
+
+
+class BilletDataResponse(BilletResponse):
+
+    def __init__(self, xml):
+        self._fields = getattr(self, '_fields', {})
+
+        self._fields['document_number'] = 'DocumentNumber'
+        self._fields['document_date'] = ('DocumentDate', to_date)
+        self._fields['type'] = 'BoletoType'
+        self._fields['paid_amount'] = ('PaidAmount', to_decimal)
+        self._fields['bank_number'] = 'BankNumber'
+        self._fields['agency'] = 'Agency'
+        self._fields['account'] = 'Account'
+
+        super(BilletDataResponse, self).__init__(xml)
