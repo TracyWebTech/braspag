@@ -47,7 +47,7 @@ Billet generation is not yet implemented.
             xml = xml.encode('utf-8')
 
         http = httplib.HTTPSConnection(self.url)
-        http.request("POST", WSDL, body=xml, headers = {
+        http.request("POST", uri, body=xml, headers = {
             "Host": "localhost",
             "Content-Type": "text/xml; charset=UTF-8",
         })

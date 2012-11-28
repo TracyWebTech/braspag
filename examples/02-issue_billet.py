@@ -31,3 +31,4 @@ logging.info(pformat(response.__dict__))
 # Get billet data
 response2 = request.get_billet_data(response.transaction_id)
 logging.info(pformat(response2.__dict__))
+
