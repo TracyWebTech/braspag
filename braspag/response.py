@@ -99,7 +99,7 @@ class CreditCardResponse(PagadorResponse):
 
     def __init__(self, xml):
 
-        self._fields = {}
+        self._fields = getattr(self, '_fields', {})
 
         # auth fields
         self._fields['order_id'] = 'OrderId'
@@ -132,7 +132,7 @@ class CreditCardAuthorizationResponse(CreditCardResponse):
     )
 
     def __init__(self, xml):
-        self._fields = {}
+        self._fields = getattr(self, '_fields', {})
         self._fields['card_token'] = 'CreditCardToken'
         super(CreditCardAuthorizationResponse, self).__init__(xml)
 

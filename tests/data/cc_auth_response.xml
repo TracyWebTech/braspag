@@ -44,6 +44,9 @@
             <Status>
               1
             </Status>
+            <CreditCardToken>
+              08fc9329-2c7e-4f6a-9df4-96b483346305
+            </CreditCardToken>
             <CreditCardToken xsi:nil="true"/>
           </PaymentDataResponse>
         </PaymentDataCollection>

@@ -32,6 +32,7 @@ class AuthorizeTest(BraspagTestCase):
             'card_number': '0000000000000001',
             'card_security_code': '123',
             'card_exp_date': '05/2018',
+            'save_card': True,
             'payment_method': PAYMENT_METHODS['Simulated']['BRL'],
         }
 
@@ -52,6 +53,7 @@ class AuthorizeTest(BraspagTestCase):
                 ('number_of_payments', 1),
                 ('country', 'BRA'),
                 ('transaction_type', 2),
+                ('save_card', 'true'),
             ])
         )
 
@@ -100,7 +102,7 @@ class AuthorizeTest(BraspagTestCase):
         assert self.response.transaction_id == u'0dfc078c-4c8b-454a-af0f-1f02023a4141'
 
     def test_card_token(self):
-        pass #TODO
+        assert self.response.card_token == '08fc9329-2c7e-4f6a-9df4-96b483346305'
 
     def test_errors(self):
         pass #TODO
