@@ -186,6 +186,7 @@ class BilletDataResponse(BilletResponse):
 
         self._fields['document_number'] = 'DocumentNumber'
         self._fields['document_date'] = ('DocumentDate', to_date)
+        self._fields['payment_date'] = ('PaymentDate', to_date)
         self._fields['type'] = 'BoletoType'
         self._fields['paid_amount'] = ('PaidAmount', to_decimal)
         self._fields['bank_number'] = 'BankNumber'
