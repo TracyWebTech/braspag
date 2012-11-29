@@ -105,4 +105,10 @@ class AuthorizeTest(BraspagTestCase):
         assert self.response.card_token == '08fc9329-2c7e-4f6a-9df4-96b483346305'
 
     def test_errors(self):
-        pass #TODO
+        with open('tests/data/authorization_error_response.xml') as response:
+            self.braspag._request.return_value = response.read()
+
+        auth_response = self.braspag.authorize(**self.data_dict) 
+        assert len(auth_response.errors) == 2
+        assert auth_response.errors[0] == (122, 'Invalid MerchantId')
+        assert auth_response.errors[1] == (134, 'Invalid Email Address')

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <AuthorizeTransactionResponse xmlns="https://www.pagador.com.br/webservice/pagador">
+      <AuthorizeTransactionResult>
+        <CorrelationId>
+          0ea6ad48-6f07-4a0b-8c4d-a823f26d1bde
+        </CorrelationId>
+        <Success>
+          false
+        </Success>
+        <ErrorReportDataCollection>
+          <ErrorReportDataResponse>
+            <ErrorCode>
+              122
+            </ErrorCode>
+            <ErrorMessage>
+              Invalid MerchantId
+            </ErrorMessage>
+          </ErrorReportDataResponse>
+          <ErrorReportDataResponse>
+            <ErrorCode>
+              134
+            </ErrorCode>
+            <ErrorMessage>
+              Invalid Email Address
+            </ErrorMessage>
+          </ErrorReportDataResponse>
+        </ErrorReportDataCollection>
+      </AuthorizeTransactionResult>
+    </AuthorizeTransactionResponse>
+  </soap:Body>
+</soap:Envelope>

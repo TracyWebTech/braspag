@@ -69,13 +69,12 @@ class PagadorResponse(object):
         self._fields['correlation_id'] = 'CorrelationId'
         self._fields['amount'] = ('Amount', to_decimal)
         self._fields['success'] = ('Success', to_bool)
-
-        # TODO
-        #self.errors = []
+        self.errors = []
 
         self.parse_xml(xml)
 
     def parse_xml(self, xml):
+
         # Set None as defaults
         for field in self._fields:
             setattr(self, field, None)
@@ -93,6 +92,19 @@ class PagadorResponse(object):
                     if elem.tag.endswith('}' + tag):
                         value = convert(elem.text.strip())
                         setattr(self, field, value)
+                    elif elem.tag.endswith('}ErrorReportDataResponse'):
+                        error = self._get_error(elem)
+                        if not error in self.errors:
+                            self.errors.append(self._get_error(elem))
+
+
+    def _get_error(self, error_node):
+        for node in error_node.iter():
+            if node.tag.endswith('}ErrorCode'):
+                code = node.text.strip()
+            elif node.tag.endswith('}ErrorMessage'):
+                msg = node.text.strip()
+        return int(code), msg
 
 
 class CreditCardResponse(PagadorResponse):
@@ -114,11 +126,13 @@ class CreditCardResponse(PagadorResponse):
 
         self._fields['status'] = ('Status', int)
 
-        #self.status_message = None
-
         super(CreditCardResponse, self).__init__(xml)
-        if self._STATUS and hasattr(self, 'status'):
-            self.status_message = dict(self._STATUS)[self.status]
+
+        status = getattr(self, 'status', None)
+        if self._STATUS and status is not None:
+            self.status_message = dict(self._STATUS)[status]
+        else:
+            self.status_message = None
 
 
 class CreditCardAuthorizationResponse(CreditCardResponse):
