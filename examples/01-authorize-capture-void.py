@@ -12,7 +12,7 @@ if len(sys.argv) > 1:
 else:
     MERCHANT_ID = u'12345678-1234-1234-1234-1234567890AB'
 
-logging.root.setLevel(logging.INFO)
+logging.root.setLevel(logging.DEBUG)
 
 # Create request object
 request = BraspagRequest(merchant_id=MERCHANT_ID, homologation=True)
@@ -30,7 +30,9 @@ response = request.authorize(
     card_number=u'0000000000000001',
     card_security_code='123',
     card_exp_date='05/2018',
+    save_card=True,
 )
+
 logging.info(pformat(response.__dict__))
 
 # Capture

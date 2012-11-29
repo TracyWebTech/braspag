@@ -12,7 +12,7 @@ if len(sys.argv) > 1:
 else:
     MERCHANT_ID = u'12345678-1234-1234-1234-1234567890AB'
 
-logging.root.setLevel(logging.INFO)
+logging.root.setLevel(logging.DEBUG)
 
 # Create request object
 request = BraspagRequest(merchant_id=MERCHANT_ID, homologation=True)
