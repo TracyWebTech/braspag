@@ -122,6 +122,7 @@ class CreditCardResponse(PagadorResponse):
 
 
 class CreditCardAuthorizationResponse(CreditCardResponse):
+
     _STATUS = (
         (0, 'Captured'),
         (1, 'Authorized'),
@@ -129,6 +130,11 @@ class CreditCardAuthorizationResponse(CreditCardResponse):
         (3, 'Disqualifying Error'),
         (4, 'Waiting for Answer'),
     )
+
+    def __init__(self, xml):
+        self._fields = {}
+        self._fields['card_token'] = 'CreditCardToken'
+        super(CreditCardAuthorizationResponse, self).__init__(xml)
 
 
 class CreditCardCancelResponse(CreditCardResponse):
