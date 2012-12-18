@@ -37,6 +37,8 @@ Billet generation is not yet implemented.
             loader=jinja2.PackageLoader('braspag'),
         )
 
+        self.log = logging.getLogger('braspag')
+
     def _request(self, xml, query=False):
         if query:
             uri = '/services/pagadorQuery.asmx'
@@ -53,7 +55,7 @@ Billet generation is not yet implemented.
         })
         response = http.getresponse()
         xmlresponse = response.read()
-        logging.debug(minidom.parseString(xmlresponse).toprettyxml(indent='  '))
+        self.log.debug(minidom.parseString(xmlresponse).toprettyxml(indent='  '))
         return xmlresponse
 
     def authorize(self, **kwargs):
@@ -211,7 +213,7 @@ with `transaction_types` 1 or 3.
 
         template = self.jinja_env.get_template(template_name)
         xml_request = template.render(data_dict)
-        logging.debug(xml_request)
+        self.log.debug(xml_request)
         return xml_request
 
     def issue_billet(self, **kwargs):
