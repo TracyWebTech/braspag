@@ -60,6 +60,13 @@ def to_date(value):
     return datetime.strptime(value, '%m/%d/%Y %H:%M:%S %p')
 
 
+def to_int(value):
+    if value.isdigit():
+        return int(value)
+    else:
+        #some BoletoNumber came with - e.g: 10027-1
+        return int(value.replace('-',''))
+
 class PagadorResponse(object):
 
     def __init__(self, xml):
@@ -169,7 +176,7 @@ class BilletResponse(PagadorResponse):
         self._fields['braspag_order_id'] = 'BraspagOrderId'
         self._fields['payment_method'] = ('PaymentMethod', int)
 
-        self._fields['number'] = ('BoletoNumber', int)
+        self._fields['number'] = ('BoletoNumber', to_int)
         self._fields['expiration_date'] = ('BoletoExpirationDate', to_date)
         self._fields['url'] = 'BoletoUrl'
         self._fields['assignor'] = 'Assignor'
