@@ -88,6 +88,8 @@ Billet generation is not yet implemented.
                    be handled. *Default: 0*. See :ref:`payment_plans`.
 :arg payment_method: Integer representing one of the
                      available :ref:`payment_methods`.
+:arg soft_descriptor: Order description to be shown on the customer
+                      card statement. Maximum of 13 characters.
 
 :returns: :class:`~braspag.BraspagResponse`
 
@@ -137,6 +139,9 @@ Billet generation is not yet implemented.
 
         if kwargs.get('save_card', False):
             kwargs['save_card'] = 'true'
+
+        # only keep first 13 chars
+        kwargs['soft_descriptor'] = kwargs['soft_descriptor'][:13]
 
         xml_request = self._render_template('authorize_creditcard.xml', kwargs)
         response = self._request(spaceless(xml_request))

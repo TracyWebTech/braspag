@@ -66,7 +66,16 @@
 
             {% block payment_data %}{% endblock %}
 
+          {% if soft_descriptor %}
+            <AdditionalDataCollection>
+              <AdditionalDataRequest>
+                <Name>SoftDescriptor</Name>
+                <Value>{{ soft_descriptor }}</Value>
+              </AdditionalDataRequest>
+            </AdditionalDataCollection>
+          {% else %}
             <AdditionalDataCollection xsi:nil="true" />
+          {% endif %}
           </PaymentDataRequest>
         </PaymentDataCollection>
       </request>
