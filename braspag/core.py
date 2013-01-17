@@ -140,9 +140,16 @@ Billet generation is not yet implemented.
         if kwargs.get('save_card', False):
             kwargs['save_card'] = 'true'
 
-        # only keep first 13 chars
-        if kwargs.get('soft_descriptor'):
-            kwargs['soft_descriptor'] = kwargs['soft_descriptor'][:13]
+        soft_desc = kwargs.get('soft_descriptor')
+        if soft_desc:
+            # only keep first 13 chars
+            soft_desc = soft_desc[:13]
+
+            # Replace special chars by ascii
+            soft_desc = unicodedata.normalize('NFKD', soft_desc)
+            soft_desc = soft_desc.encode('ascii', 'ignore')
+
+            kwargs['soft_descriptor'] = soft_desc
 
         xml_request = self._render_template('authorize_creditcard.xml', kwargs)
         response = self._request(spaceless(xml_request))
