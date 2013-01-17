@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import uuid
 import httplib
 import logging
+import unicodedata
 
 import jinja2
 
